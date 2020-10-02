@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">ApiCall</string>
+    <string name="movie1">Once Upon a Time in Hollywood</string>
+    <string name="movie2">The Avengers Endgame</string>
+    <string name="movie3">The Aveners Infinity War</string>
+    <string name="movie4">Black Panther</string>
+    <string name="movie5">Joker</string>
+    <string name="movie6">Toy Story 4</string>
+    <string name="movie7">Captain Marvel</string>
+    <string name="movie8">La La Land</string>
+    <string name="movie9">Catch Me If you Can</string>
+    <string name="movie10">Shutter Island</string>
+    <string name="movie11">The Wolf Of the Wall Street</string>
+    <string name="movie12">Blood Diamond</string>
+    <string name="movie13">Inception</string>
+    <string name="movie14">Interstellar</string>
+    <string name="rating">IMDB Rating:</string>
+    <string name="ratin2"> </string>
+    <string name="imageDescription">MovieDescription</string>
+    <string name="submit">search</string>
+</resources>
