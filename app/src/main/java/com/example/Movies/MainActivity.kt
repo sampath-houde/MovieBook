@@ -1,11 +1,10 @@
-package com.example.Movies.views
+package com.example.Movies
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import com.example.Movies.R
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.Movies.login_register.views.LoginActivity
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -15,9 +14,9 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        Handler().postDelayed({
-            val intent = Intent(this, MovieList::class.java)
+        /*Handler().postDelayed({
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-        }, 2000)
+        }, 1)*/
     }
 }

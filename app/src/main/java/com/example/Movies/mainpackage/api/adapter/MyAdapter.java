@@ -1,4 +1,4 @@
-package com.example.Movies.adapter;
+package com.example.Movies.mainpackage.api.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +13,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.Movies.model.MovieSearchList;
-import com.example.Movies.model.MovieTrending;
+import com.example.Movies.mainpackage.api.model.MovieSearchList;
+import com.example.Movies.mainpackage.api.model.MovieTrending;
 import com.example.Movies.R;
-import com.example.Movies.views.MovieDescription;
+import com.example.Movies.mainpackage.api.views.MovieDescription;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.Movies.views
+package com.example.Movies.mainpackage.api.views
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -8,17 +8,16 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
-import com.example.Movies.adapter.MyAdapter
-import com.example.Movies.api.OMDBapi
-import com.example.Movies.api.RetrofitInstance
-import com.example.Movies.model.MovieTrending
+import com.example.Movies.mainpackage.api.adapter.MyAdapter
+import com.example.Movies.mainpackage.api.ApiInterface.OMDBapi
+import com.example.Movies.mainpackage.api.ApiInterface.RetrofitInstance
+import com.example.Movies.mainpackage.api.model.MovieTrending
 import kotlinx.android.synthetic.main.movie_list2.*
 import retrofit2.Call
 import retrofit2.Callback

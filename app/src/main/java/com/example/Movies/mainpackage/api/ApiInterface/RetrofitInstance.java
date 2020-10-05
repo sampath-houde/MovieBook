@@ -1,4 +1,6 @@
-package com.example.Movies.api;
+package com.example.Movies.mainpackage.api.ApiInterface;
+
+import com.example.Movies.mainpackage.api.ApiInterface.OMDBapi;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

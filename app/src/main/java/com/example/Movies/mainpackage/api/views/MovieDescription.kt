@@ -1,19 +1,15 @@
-package com.example.Movies.views
+package com.example.Movies.mainpackage.api.views
 
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.Movies.R
-import com.example.Movies.api.RetrofitInstance
 import kotlinx.android.synthetic.main.activity_movie_description.*
 import kotlinx.android.synthetic.main.activity_movie_description.progressCardView
-import kotlinx.android.synthetic.main.movie_list2.*
-import kotlinx.android.synthetic.main.my_view.*
 
 @Suppress("DEPRECATION")
 class MovieDescription : AppCompatActivity() {

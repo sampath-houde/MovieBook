@@ -1,23 +1,21 @@
-package com.example.Movies.adapter;
+package com.example.Movies.mainpackage.api.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.CaptivePortal;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.Movies.model.MovieSearchList;
+import com.example.Movies.mainpackage.api.model.MovieSearchList;
 import com.example.Movies.R;
-import com.example.Movies.views.MovieDescription;
+import com.example.Movies.mainpackage.api.views.MovieDescription;
 
 import java.util.List;
 

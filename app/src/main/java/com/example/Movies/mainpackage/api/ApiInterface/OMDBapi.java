@@ -1,6 +1,6 @@
-package com.example.Movies.api;
-import com.example.Movies.model.MovieSearchList;
-import com.example.Movies.model.MovieTrending;
+package com.example.Movies.mainpackage.api.ApiInterface;
+import com.example.Movies.mainpackage.api.model.MovieSearchList;
+import com.example.Movies.mainpackage.api.model.MovieTrending;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

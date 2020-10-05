@@ -1,4 +1,4 @@
-package com.example.Movies.model;
+package com.example.Movies.mainpackage.api.model;
 
 
 import com.google.gson.annotations.Expose;
