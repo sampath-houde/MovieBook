@@ -1,5 +1,7 @@
 package com.example.Movies.login_register.views
 
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -94,11 +96,8 @@ class RegisterActivity : AppCompatActivity() {
         editor.putString("userData", json)
         editor.apply()
 
-        val sharedPreferences2 = getSharedPreferences("MovieFinder", MODE_PRIVATE)
-        json = sharedPreferences2.getString("userData", null)!!
-        val type: Type = object : TypeToken<ArrayList<UserDataBase?>?>() {}.type
-        userEmpty_list = gson.fromJson(json, type)
-        
-        Log.d("List of User", userEmpty_list.get(0))
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+
     }
 }

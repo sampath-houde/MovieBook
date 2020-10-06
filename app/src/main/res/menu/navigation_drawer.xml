@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/trending"
+            android:icon="@drawable/ic_baseline_trending_up_24"
+            android:title="Trending" />
+        <item
+            android:id="@+id/Search"
+            android:icon="@drawable/ic_baseline_search_24"
+            android:title="Search" />
+
+        <item
+            android:id="@+id/Favourites"
+            android:icon="@drawable/heart_vector"
+            android:title="Favourites" />
+    </group>
+
+
+    <item
+        android:id="@+id/logout"
+        android:title="Profile">
+        <menu>
+            <item
+                android:id="@+id/btn_logout"
+                android:icon="@drawable/ic_baseline_input_24"
+                android:title="Logout" />
+        </menu>
+    </item>
+</menu>

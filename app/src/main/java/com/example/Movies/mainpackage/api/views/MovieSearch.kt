@@ -56,14 +56,14 @@ class MovieSearch : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView2)
 
 
-        searchButton.setOnClickListener {
+        search_button.setOnClickListener {
 
             progrressCardView.visibility = View.VISIBLE
             Handler().postDelayed({
 
-                val searchQuery = getSearchQuery.text.toString()
+                val searchQuery = searchEditText.text.toString()
                 getSearchMoviesList(searchQuery)
-                getSearchQuery.setText("")
+                searchEditText.setText("")
 
             }, 2000)
 
@@ -84,6 +84,7 @@ class MovieSearch : AppCompatActivity() {
         if(searchQuery.trim() == "")
         {
             Toast.makeText(applicationContext, "Enter Movie Name", Toast.LENGTH_SHORT).show()
+            progrressCardView.visibility = View.INVISIBLE
         }
         else {
             val getOMDBapi2: OMDBapi = RetrofitInstance.getService()

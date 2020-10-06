@@ -5,27 +5,36 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.Menu
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
+import com.example.Movies.login_register.views.LoginActivity
 import com.example.Movies.mainpackage.api.adapter.MyAdapter
 import com.example.Movies.mainpackage.api.ApiInterface.OMDBapi
 import com.example.Movies.mainpackage.api.ApiInterface.RetrofitInstance
 import com.example.Movies.mainpackage.api.model.MovieTrending
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.movie_list2.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 @Suppress("DEPRECATION")
-class MovieList : AppCompatActivity(){
+class MovieList : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
 
+    private lateinit var drawerLayoutManager: DrawerLayout
+    private lateinit var navigationView: NavigationView
+    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private var results = listOf<MovieTrending.Result>()
 
     private lateinit var recyclerView: RecyclerView
@@ -37,6 +46,32 @@ class MovieList : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.movie_list2)
+
+
+
+        fun toolBarMenu()
+        {
+            toolbar = findViewById(R.id.my_toolbar)
+            toolbar.setTitle("Movie List")
+            setSupportActionBar(toolbar)
+        }
+
+        fun setupNavigationDrawer()
+        {
+            navigationView = findViewById(R.id.navigationView)
+            drawerLayoutManager = findViewById(R.id.drawerlayout)
+
+            val toggle = ActionBarDrawerToggle(this,
+                            drawerLayoutManager,
+                            toolbar,
+                            R.string.openDrawer,
+                            R.string.drawerClose)
+
+            drawerLayoutManager.addDrawerListener(toggle)
+            toggle.syncState()
+            navigationView.setNavigationItemSelectedListener(this)
+        }
+
 
         recyclerView = findViewById(R.id.RecyclerView)
 
@@ -51,27 +86,10 @@ class MovieList : AppCompatActivity(){
 
         }, 1500)
 
+
         textView3.visibility = View.INVISIBLE
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.search, menu)
-        val item: MenuItem? = menu?.findItem(R.id.actionSearch)
-        val searchView: SearchView = item!!.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                Log.d("Search Value", newText.toString())
-                onFilter(newText.toString())
-                return true
-            }
-
-        })
-        return super.onCreateOptionsMenu(menu)
-    }
 
     private fun getTrendingMoviesList() {
 
@@ -139,5 +157,9 @@ class MovieList : AppCompatActivity(){
         }
     }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        drawerLayoutManager.closeDrawer(GravityCompat.START)
+        return true
+    }
 }
 
