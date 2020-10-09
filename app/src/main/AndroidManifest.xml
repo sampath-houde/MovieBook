@@ -18,13 +18,15 @@
         <activity
             android:name=".SplashScreen"
             android:label="Movie Finder"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".login_register.views.LoginActivity">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".login_register.views.LoginActivity">
+
         </activity>
         <activity android:name=".login_register.views.RegisterActivity" />
         <activity
