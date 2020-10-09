@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_user_profile.*
 import java.lang.reflect.Type
 
 class UserProfile : AppCompatActivity() {
@@ -36,6 +37,11 @@ class UserProfile : AppCompatActivity() {
         getUserList()
 
         fetchDetailsOfCurrentUser()
+
+        myBookings.setOnClickListener {
+            val intent = Intent(this, UserBookings::class.java)
+            startActivity(intent)
+        }
     }
 
     fun getUserList() {

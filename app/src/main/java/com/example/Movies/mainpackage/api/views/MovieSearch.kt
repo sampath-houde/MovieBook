@@ -73,7 +73,6 @@ class MovieSearch : AppCompatActivity() {
 
     private fun setDataToRecycler2(body: MovieSearchList) {
         myAdapter = MyAdapter2(this, body.results2)
-        val intent = Intent(this, MovieDescription::class.java)
         recyclerView.adapter = myAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 

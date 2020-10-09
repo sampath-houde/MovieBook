@@ -1,14 +1,24 @@
 package com.example.Movies.userDataBase
 
+import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 import kotlin.properties.Delegates
 
 
-class UserDataBase {
+class UserDataBase() : Serializable{
 
-   public lateinit var user_name: String
-     public lateinit var user_email:String
-     public lateinit var user_phone:String
-     public lateinit var user_password: String
+    public lateinit var user_name: String
+    public lateinit var user_email: String
+    public lateinit var user_phone: String
+    public lateinit var user_password: String
+    public  var movie_booked = ArrayList<Movie_booked>()
+
+
+    class Movie_booked : Serializable{
+        public lateinit var movie_name: String
+        public lateinit var movie_tikcets: String
+        public lateinit var movie_poster: String
+    }
     /* private var user_name: String=""
          get() = field
          set(value){field=value}
@@ -24,8 +34,6 @@ class UserDataBase {
       private  var user_password: String =""
       get()=field
       set(value){field=value}*/
-
-
 
 
     /*public fun getUser_name(): String {

@@ -95,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
         return i;
     }
 
-    fun getUserList(): ArrayList<UserDataBase> {
+    fun getUserList() {
         val sharedPreferences2: SharedPreferences = getSharedPreferences("Main", MODE_PRIVATE)
         val gson = Gson()
         val json = sharedPreferences2.getString("activity", null)
@@ -106,7 +106,6 @@ class LoginActivity : AppCompatActivity() {
 
             userEmpty_list = gson.fromJson(json, type)
         }
-        return userEmpty_list
     }
 
 }

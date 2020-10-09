@@ -26,11 +26,12 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
-        android:layout_marginTop="80dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profileImagCard">
@@ -61,11 +62,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/muli"
+                android:padding="10dp"
                 android:text="shoude42@gmail.com"
+                android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="25dp"
-                android:padding="10dp"
-                android:textAlignment="center"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,32 +84,32 @@
                 android:textColor="@android:color/white"
                 android:textSize="25dp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profileEmail" />
-
-            <Button
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="32dp"
-                android:padding="10dp"
-                android:textStyle="bold"
-                android:text="My Bookings"
-                android:textColor="@android:color/holo_orange_dark"
-                android:textSize="20dp"
-                android:fontFamily="@font/muli"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profileNumber" />
+                app:layout_constraintTop_toBottomOf="@id/profileEmail" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
     </com.google.android.material.card.MaterialCardView>
+
+    <Button
+        android:id="@+id/myBookings"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/muli"
+        android:padding="15dp"
+        android:text="My Bookings"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

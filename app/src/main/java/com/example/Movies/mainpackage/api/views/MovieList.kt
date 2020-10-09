@@ -63,6 +63,7 @@ class MovieList : AppCompatActivity(){
                 }
 
                 R.id.logout -> {
+                    Toast.makeText(applicationContext, "Logout Successful", Toast.LENGTH_SHORT).show()
                     val intentLogout = Intent(this,LoginActivity::class.java)
                     startActivity(intentLogout)
                 }

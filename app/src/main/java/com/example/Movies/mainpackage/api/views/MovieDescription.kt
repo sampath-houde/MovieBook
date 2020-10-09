@@ -74,12 +74,19 @@ class MovieDescription : AppCompatActivity() {
             }
 
             checkout.setOnClickListener {
-                Toast.makeText(applicationContext, "Tickets added to Cart", Toast.LENGTH_SHORT).show()
-                val intentBooking = Intent(this, CheckoutActivity::class.java)
-                intentBooking.putExtra("movieName", data1)
-                intentBooking.putExtra("moviePoster", data4)
-                intentBooking.putExtra("TicketCount", tickets)
-                startActivity(intentBooking)
+                if(tickets == 0)
+                {
+                    Snackbar.make(checkout, "No Tickets Booked", Snackbar.LENGTH_SHORT).show()
+                }
+                else {
+                    Toast.makeText(applicationContext, "Tickets added to Cart", Toast.LENGTH_SHORT)
+                        .show()
+                    val intentBooking = Intent(this, CheckoutActivity::class.java)
+                    intentBooking.putExtra("movieName", data1)
+                    intentBooking.putExtra("moviePoster", data4)
+                    intentBooking.putExtra("TicketCount", tickets)
+                    startActivity(intentBooking)
+                }
             }
 
 
