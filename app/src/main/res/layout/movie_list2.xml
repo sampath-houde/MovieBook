@@ -9,33 +9,23 @@
     android:layout_width="match_parent"
     android:fitsSystemWindows="true">
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigationView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:menu="@menu/navigation_drawer"
-        android:isScrollContainer="true"
-        app:itemIconTint="@color/colorPrimaryDark"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header" />
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#f2f2f2">
+            android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
+            app:navigationIcon="@drawable/ic_baseline_dehaze_24"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:elevation="5dp"
-            app:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -128,6 +118,15 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:menu="@menu/navigation_drawer"
+        android:isScrollContainer="true"
+        app:itemIconTint="@color/colorPrimaryDark"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

@@ -1,28 +1,29 @@
-package com.example.Movies.login_register.userDataBase
+package com.example.Movies.userDataBase
+
+import kotlin.properties.Delegates
 
 
-
- class UserDataBase {
+class UserDataBase {
 
    public lateinit var user_name: String
      public lateinit var user_email:String
      public lateinit var user_phone:String
      public lateinit var user_password: String
-   /* private var user_name: String=""
-        get() = field
-        set(value){field=value}
-
-     private var user_email: String =""
-     get() = field
-     set(value){field=value}
-
-     private var user_phone: String = ""
+    /* private var user_name: String=""
          get() = field
-         set(value) {field=value}
+         set(value){field=value}
 
-     private  var user_password: String =""
-     get()=field
-     set(value){field=value}*/
+      private var user_email: String =""
+      get() = field
+      set(value){field=value}
+
+      private var user_phone: String = ""
+          get() = field
+          set(value) {field=value}
+
+      private  var user_password: String =""
+      get()=field
+      set(value){field=value}*/
 
 
 

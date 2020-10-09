@@ -4,9 +4,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/trending"
-            android:icon="@drawable/ic_baseline_trending_up_24"
-            android:title="Trending" />
+            android:id="@+id/Home"
+            android:icon="@drawable/ic_baseline_home_24"
+            android:title="Home" />
         <item
             android:id="@+id/Search"
             android:icon="@drawable/ic_baseline_search_24"
@@ -20,11 +20,17 @@
 
 
     <item
-        android:id="@+id/logout"
-        android:title="Profile">
+        android:id="@+id/account"
+        android:title="Account">
         <menu>
+
             <item
-                android:id="@+id/btn_logout"
+                android:id="@+id/profileSection"
+                android:icon="@drawable/ic_baseline_face_24"
+                android:title="Profile"/>
+
+            <item
+                android:id="@+id/logout"
                 android:icon="@drawable/ic_baseline_input_24"
                 android:title="Logout" />
         </menu>

@@ -7,7 +7,7 @@ import android.os.Handler
 import com.example.Movies.login_register.views.LoginActivity
 
 @Suppress("DEPRECATION")
-class MainActivity : AppCompatActivity() {
+class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

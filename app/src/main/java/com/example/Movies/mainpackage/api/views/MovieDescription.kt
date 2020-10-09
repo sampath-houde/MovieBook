@@ -1,15 +1,20 @@
 package com.example.Movies.mainpackage.api.views
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.Movies.R
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_movie_description.*
 import kotlinx.android.synthetic.main.activity_movie_description.progressCardView
+import kotlin.properties.Delegates
 
 @Suppress("DEPRECATION")
 class MovieDescription : AppCompatActivity() {
@@ -19,6 +24,7 @@ class MovieDescription : AppCompatActivity() {
     lateinit var data4: String //moviePoster
     lateinit var data5: String //movieReleaseDate
     lateinit var data7: String //movieCount
+    var tickets = 0//no of tickets
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +39,12 @@ class MovieDescription : AppCompatActivity() {
             movieNameCardView.visibility = View.VISIBLE
             plotCardView.visibility = View.VISIBLE
             progressCardView.visibility = View.INVISIBLE
+            bookingCard.visibility = View.VISIBLE
             // Set Data
             rating5.setText("N/A")
             rating3.setText(data7)
+            val randomTicketGenerator = (0..30).random()
+            ticketsCount.setText(randomTicketGenerator.toString())
             moviename.setText(data1)
             movierating.setText("N/A")
             releaseDate2.setText(data5)
@@ -50,12 +59,34 @@ class MovieDescription : AppCompatActivity() {
                     s1 = s1 + data4[i]
                 }
                 Glide.with(this).load("https://image.tmdb.org/t/p/w500/" + s1)
-                    .into(imageView3)
+                    .into(imageview)
             }
+
+            bookbutton.setOnClickListener {
+                tickets++
+                if(tickets <= randomTicketGenerator) {
+                    Snackbar.make(bookbutton, "Tickets Added to Cart: "+tickets, Snackbar.LENGTH_SHORT).show()
+                }
+                else {
+                    Snackbar.make(bookbutton,"Limit Exceeded", Snackbar.LENGTH_SHORT).show()
+                    tickets = randomTicketGenerator
+                }
+            }
+
+            checkout.setOnClickListener {
+                Toast.makeText(applicationContext, "Tickets added to Cart", Toast.LENGTH_SHORT).show()
+                val intentBooking = Intent(this, CheckoutActivity::class.java)
+                intentBooking.putExtra("movieName", data1)
+                intentBooking.putExtra("moviePoster", data4)
+                intentBooking.putExtra("TicketCount", tickets)
+                startActivity(intentBooking)
+            }
+
 
         }, 500)
 
         plotCardView.visibility = View.INVISIBLE
+        bookingCard.visibility = View.INVISIBLE
         movieNameCardView.visibility = View.INVISIBLE
         imageCardView.visibility = View.INVISIBLE
 
