@@ -33,6 +33,7 @@ class MovieDescription : AppCompatActivity() {
         val moviename: TextView = findViewById(R.id.movieName)
         val movierating: TextView = findViewById(R.id.rating2)
         val moviedescription: TextView = findViewById(R.id.movieDescription)
+        val randomTicketGenerator = (1..30).random()
 
         Handler().postDelayed({
             imageCardView.visibility = View.VISIBLE
@@ -43,8 +44,6 @@ class MovieDescription : AppCompatActivity() {
             // Set Data
             rating5.setText("N/A")
             rating3.setText(data7)
-            val randomTicketGenerator = (0..30).random()
-            ticketsCount.setText(randomTicketGenerator.toString())
             moviename.setText(data1)
             movierating.setText("N/A")
             releaseDate2.setText(data5)
@@ -62,21 +61,33 @@ class MovieDescription : AppCompatActivity() {
                     .into(imageview)
             }
 
-            bookbutton.setOnClickListener {
+            btn_plus.setOnClickListener {
                 tickets++
                 if(tickets <= randomTicketGenerator) {
-                    Snackbar.make(bookbutton, "Tickets Added to Cart: "+tickets, Snackbar.LENGTH_SHORT).show()
+                    ticketsCount.setText(tickets.toString())
                 }
                 else {
-                    Snackbar.make(bookbutton,"Limit Exceeded", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(btn_plus,"No Tickets Left", Snackbar.LENGTH_SHORT).show()
                     tickets = randomTicketGenerator
                 }
             }
 
-            checkout.setOnClickListener {
+            btn_minus.setOnClickListener {
+                tickets--
+                if(tickets <= randomTicketGenerator) {
+                    ticketsCount.setText(tickets.toString())
+                }
+                else
+                {
+                    Snackbar.make(btn_plus,"Invaid Input", Snackbar.LENGTH_SHORT).show()
+                    tickets = 0
+                }
+            }
+
+            btn_bookNow.setOnClickListener {
                 if(tickets == 0)
                 {
-                    Snackbar.make(checkout, "No Tickets Booked", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(btn_bookNow, "No Tickets Booked", Snackbar.LENGTH_SHORT).show()
                 }
                 else {
                     Toast.makeText(applicationContext, "Tickets added to Cart", Toast.LENGTH_SHORT)

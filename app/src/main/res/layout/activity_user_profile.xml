@@ -1,115 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.Movies.mainpackage.api.views.UserProfile">
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/profileImagCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="20dp"
-        android:layout_marginTop="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:src="@drawable/dummyp_profile"
-            android:layout_height="150dp"
-            android:padding="10dp"
-            android:background="@color/movie_backforund"
-            android:layout_width="150dp"/>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profileImagCard">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/amin">
-
-            <TextView
-                android:id="@+id/profileName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:fontFamily="@font/muli"
-                android:padding="10dp"
-                android:text="Sampath Houde"
-                android:textColor="@android:color/white"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/profileEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/muli"
-                android:padding="10dp"
-                android:text="shoude42@gmail.com"
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profileName" />
-
-            <TextView
-                android:id="@+id/profileNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/muli"
-                android:padding="10dp"
-                android:text="9021348922"
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                android:layout_marginBottom="32dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profileEmail" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <Button
-        android:id="@+id/myBookings"
-        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/muli"
-        android:padding="15dp"
-        android:text="My Bookings"
-        android:textColor="@android:color/white"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+<?xml version="1.0" encoding="utf-8"?><ScrollView    xmlns:android="http://schemas.android.com/apk/res/android"    xmlns:app="http://schemas.android.com/apk/res-auto"    xmlns:tools="http://schemas.android.com/tools"    android:layout_width="match_parent"    android:layout_height="match_parent"><androidx.constraintlayout.widget.ConstraintLayout    android:layout_width="match_parent"    android:layout_height="match_parent">    <LinearLayout        android:id="@+id/linearLayout"        android:layout_width="match_parent"        android:layout_height="200dp"        android:background="@drawable/amin"        android:gravity="center_horizontal"        android:orientation="horizontal" />    <com.mikhaellopez.circularimageview.CircularImageView        android:id="@+id/profileImage"        android:layout_width="180dp"        android:layout_height="180dp"        android:layout_marginTop="70dp"        app:civ_shadow="true"        android:src="@drawable/dummyprofile2"        app:layout_constraintEnd_toEndOf="parent"        app:layout_constraintStart_toStartOf="parent"        app:layout_constraintTop_toTopOf="parent" />    <RelativeLayout        android:id="@+id/relativeLayout"        android:layout_width="match_parent"        android:layout_height="wrap_content"        android:layout_marginTop="16dp"        app:layout_constraintEnd_toEndOf="parent"        app:layout_constraintStart_toStartOf="parent"        app:layout_constraintTop_toBottomOf="@id/profileImage">        <LinearLayout            android:id="@+id/linearlayout1"            android:layout_width="match_parent"            android:layout_height="100dp"            android:layout_marginTop="10dp"            android:gravity="center_horizontal"            android:orientation="horizontal"            android:paddingTop="20dp">            <ImageView                android:layout_width="35dp"                android:layout_height="35dp"                android:layout_marginTop="10dp"                android:src="@drawable/ic_baseline_person_24" />            <TextView                android:id="@+id/profileName"                android:layout_width="wrap_content"                android:layout_height="wrap_content"                android:layout_marginTop="15dp"                android:fontFamily="@font/muli"                android:paddingLeft="12dp"                android:text="Sampath Houde"                android:textColor="#403A3A"                android:textSize="18dp" />        </LinearLayout>        <LinearLayout            android:id="@+id/linearlayout2"            android:layout_width="match_parent"            android:layout_height="100dp"            android:layout_below="@id/linearlayout1"            android:layout_marginTop="10dp"            android:gravity="center_horizontal"            android:orientation="horizontal"            android:paddingTop="20dp">            <ImageView                android:layout_width="35dp"                android:layout_height="35dp"                android:layout_marginTop="10dp"                android:src="@drawable/ic_baseline_mail_24" />            <TextView                android:id="@+id/profileEmail"                android:layout_width="wrap_content"                android:layout_height="wrap_content"                android:layout_marginTop="14dp"                android:fontFamily="@font/muli"                android:paddingLeft="12dp"                android:text="shoude42@gmail.com"                android:textColor="#403A3A"                android:textSize="18dp" />        </LinearLayout>        <LinearLayout            android:id="@+id/linearlayout3"            android:layout_width="match_parent"            android:layout_height="100dp"            android:layout_below="@id/linearlayout2"            android:layout_marginTop="10dp"            android:gravity="center_horizontal"            android:orientation="horizontal"            android:paddingTop="20dp">            <ImageView                android:layout_width="35dp"                android:layout_height="35dp"                android:layout_marginTop="10dp"                android:src="@drawable/ic_baseline_phone_24" />            <TextView                android:id="@+id/profileNumber"                android:layout_width="wrap_content"                android:layout_height="wrap_content"                android:layout_marginTop="14dp"                android:fontFamily="@font/muli"                android:paddingLeft="12dp"                android:text="9021348922"                android:textColor="#403A3A"                android:textSize="18dp" />        </LinearLayout>        <LinearLayout            android:id="@+id/linearlayout4"            android:layout_width="match_parent"            android:layout_height="100dp"            android:layout_below="@id/linearlayout3"            android:layout_marginTop="10dp"            android:gravity="center_horizontal"            android:orientation="horizontal"            android:paddingTop="20dp">            <Button                android:id="@+id/myBookings"                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"                android:layout_width="wrap_content"                android:layout_height="wrap_content"                android:layout_marginTop="5dp"                android:paddingLeft="18dp"                android:paddingTop="10dp"                android:paddingRight="18dp"                android:paddingBottom="10dp"                android:text="My Bookings"                android:textColor="#fff"                android:textSize="14dp" />        </LinearLayout>        <LinearLayout            android:id="@+id/linearlayout5"            android:layout_width="match_parent"            android:layout_height="100dp"            android:layout_below="@id/linearlayout4"            android:gravity="center_horizontal"            android:orientation="horizontal">            <com.google.android.material.button.MaterialButton                android:id="@+id/btn_logout"                style="@style/Widget.MaterialComponents.Button.OutlinedButton"                android:layout_width="wrap_content"                android:layout_height="wrap_content"                android:padding="15dp"                android:layout_marginTop="20dp"                android:text="Logout"                app:iconPadding="10dp"                android:textAllCaps="true"                android:textColor="#403A3A"                android:textSize="12dp"                app:icon="@drawable/ic_baseline_input_24"                android:layout_marginBottom="-20dp"                app:layout_constraintBottom_toBottomOf="parent"                app:layout_constraintEnd_toEndOf="parent"                app:layout_constraintStart_toStartOf="parent" />        </LinearLayout>    </RelativeLayout></androidx.constraintlayout.widget.ConstraintLayout></ScrollView>

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import com.example.Movies.R
+import com.example.Movies.login_register.views.LoginActivity
 import com.example.Movies.login_register.views.RegisterActivity
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.android.material.snackbar.Snackbar
@@ -42,6 +43,20 @@ class UserProfile : AppCompatActivity() {
             val intent = Intent(this, UserBookings::class.java)
             startActivity(intent)
         }
+
+        btn_logout.setOnClickListener {
+            Toast.makeText(applicationContext, "Logout Successful", Toast.LENGTH_SHORT).show()
+            setUserLoginStatus()
+            val intentLogout = Intent(this, LoginActivity::class.java)
+            startActivity(intentLogout)
+        }
+    }
+
+    private fun setUserLoginStatus() {
+        val loginStatus: SharedPreferences = getSharedPreferences("LoginSession", MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = loginStatus.edit()
+        editor.putBoolean("userLoginStatus", false)
+        editor.apply()
     }
 
     fun getUserList() {

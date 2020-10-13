@@ -250,7 +250,7 @@
             app:cardBackgroundColor="#161717"
             app:cardCornerRadius="10dp"
             app:cardElevation="15dp"
-            app:layout_constraintBottom_toTopOf="@id/checkout"
+            app:layout_constraintBottom_toTopOf="@id/btn_bookNow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/plotCardView">
@@ -276,55 +276,73 @@
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="92dp"
                     android:layout_marginEnd="5dp"
-                    android:text="Tickets Left: "
+                    android:text="Tickets: "
                     android:textColor="#fff"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/bookbutton"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/ticketsCount"
                     app:layout_constraintEnd_toStartOf="@+id/tickets"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/ticketsCount"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="20"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="58dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="0"
                     android:textColor="#fff"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/textView4"
-                    app:layout_constraintStart_toEndOf="@id/textView4" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/bookbutton"
-                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="24dp"
-                    android:text="Book Now!"
-                    android:textColor="#fff"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView4"
                     app:layout_constraintTop_toBottomOf="@+id/movieBooking" />
+
+                <ImageButton
+                    android:hapticFeedbackEnabled="true"
+                    android:id="@+id/btn_plus"
+                    android:background="@drawable/ic_baseline_add_24"
+                    android:layout_width="17dp"
+                    android:layout_height="22dp"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_baseline_add_24"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="@+id/ticketsCount"
+                    app:layout_constraintEnd_toStartOf="@+id/ticketsCount"
+                    app:layout_constraintTop_toTopOf="@+id/ticketsCount" />
+
+                <TextView
+                    android:hapticFeedbackEnabled="true"
+                    android:id="@+id/btn_minus"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="-"
+                    android:textColor="@android:color/white"
+                    android:textSize="40dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ticketsCount"
+                    app:layout_constraintStart_toEndOf="@+id/ticketsCount" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/checkout"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_bookNow"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="Checkout"
-            android:textColor="@color/colorPrimary"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="15dp"
+            android:text="Book Now"
+            android:textColor="@android:color/white"
+            android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -378,6 +396,10 @@
                     app:layout_constraintVertical_bias="0.763" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
+
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 

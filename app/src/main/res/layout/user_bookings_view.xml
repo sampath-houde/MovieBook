@@ -32,7 +32,7 @@
             android:id="@+id/movieName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/muli_extrabold"
             android:padding="5dp"
             android:text="Movie Name"
@@ -59,13 +59,24 @@
             android:id="@+id/ticketCount"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/muli"
             android:padding="5dp"
             android:text="10"
             android:textColor="@android:color/darker_gray"
             android:textSize="18dp"
             app:layout_constraintStart_toEndOf="@id/tickets"
-            app:layout_constraintTop_toBottomOf="@id/movieName" />
+            app:layout_constraintTop_toBottomOf="@+id/movieName" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Cancel"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

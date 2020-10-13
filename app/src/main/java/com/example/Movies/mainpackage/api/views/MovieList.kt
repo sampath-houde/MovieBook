@@ -2,6 +2,7 @@ package com.example.Movies.mainpackage.api.views
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.movie_list2.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.log
 
 @Suppress("DEPRECATION")
 class MovieList : AppCompatActivity(){
@@ -64,6 +66,7 @@ class MovieList : AppCompatActivity(){
 
                 R.id.logout -> {
                     Toast.makeText(applicationContext, "Logout Successful", Toast.LENGTH_SHORT).show()
+                    setUserLoginStatus()
                     val intentLogout = Intent(this,LoginActivity::class.java)
                     startActivity(intentLogout)
                 }
@@ -91,6 +94,13 @@ class MovieList : AppCompatActivity(){
         }, 1500)
 
         textView3.visibility = View.INVISIBLE
+    }
+
+    private fun setUserLoginStatus() {
+        val loginStatus: SharedPreferences = getSharedPreferences("LoginSession", MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = loginStatus.edit()
+        editor.putBoolean("userLoginStatus", false)
+        editor.apply()
     }
 
 

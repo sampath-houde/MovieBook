@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.NonNull
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
@@ -12,6 +13,7 @@ import com.example.Movies.userDataBase.UserDataBase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_user_bookings.*
+import kotlinx.android.synthetic.main.user_bookings_view.*
 import java.lang.reflect.Type
 
 class UserBookings : AppCompatActivity() {
@@ -24,13 +26,17 @@ class UserBookings : AppCompatActivity() {
 
     private var positionOfCurrentLoggedIn: Int = 0
 
+    public lateinit var  userBookedMovieInfo: ArrayList<UserDataBase>
+
+    public lateinit var  newUserBookedMovieInfo: ArrayList<UserDataBase.Movie_booked>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_bookings)
 
         recyclerView = findViewById(R.id.recyclerView3)
 
-        val userBookedMovieInfo = getMovieBookedList()
+        userBookedMovieInfo = getMovieBookedList()
 
         getCurrentUserSessionId()
 
@@ -42,7 +48,7 @@ class UserBookings : AppCompatActivity() {
             }
         }
 
-        val newUserBookedMovieInfo = userBookedMovieInfo.get(positionOfCurrentLoggedIn).movie_booked
+        newUserBookedMovieInfo = userBookedMovieInfo.get(positionOfCurrentLoggedIn).movie_booked
 
         setDataToRecycle3(newUserBookedMovieInfo)
 
@@ -50,7 +56,6 @@ class UserBookings : AppCompatActivity() {
             val intent = Intent(this, MovieList::class.java)
             startActivity(intent)
         }
-
     }
 
     private fun getMovieBookedList(): ArrayList<UserDataBase> {

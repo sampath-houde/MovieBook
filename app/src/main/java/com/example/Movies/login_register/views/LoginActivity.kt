@@ -26,6 +26,8 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var userEmpty_list: ArrayList<UserDataBase>
 
+    private  var loginStatus: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -58,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                 } else if (userEmpty_list.get(i).user_password == passwordText.text.toString()) {
                     Toast.makeText(applicationContext, "Login Successfull", Toast.LENGTH_SHORT)
                         .show()
-                    setUserSessionId()
+                    setUserSessionIdAndLoginStatus()
                     val intentMovieList = Intent(this, MovieList::class.java)
                     startActivity(intentMovieList)
                 } else {
@@ -68,10 +70,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-    private fun setUserSessionId() {
+    private fun setUserSessionIdAndLoginStatus() {
+        loginStatus = true
         val sharedPreferences2: SharedPreferences =getSharedPreferences("LoginSession", MODE_PRIVATE)
         val editor2: SharedPreferences.Editor = sharedPreferences2.edit()
         editor2.putString("userSessionId", emailText.text.toString())
+        editor2.putBoolean("userLoginStatus", loginStatus)
         editor2.apply()
     }
 

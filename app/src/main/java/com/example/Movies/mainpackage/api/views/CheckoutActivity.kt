@@ -25,7 +25,7 @@ class CheckoutActivity : AppCompatActivity() {
 
     private lateinit var data2: String  //MoviePoster
     private lateinit var data1: String  //MovieName
-    private var data3 by Delegates.notNull<Int>()  //MovieTickets
+    private var data3: Int = 0  //MovieTickets
 
     private lateinit var sessionId: String //CurrentLoginUser
 
