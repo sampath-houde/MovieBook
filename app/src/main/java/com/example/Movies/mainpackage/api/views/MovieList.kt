@@ -126,9 +126,9 @@ class MovieList : AppCompatActivity(){
 
             override fun onFailure(call: Call<MovieTrending>?, t: Throwable?) {
                 progressCardView.visibility = View.INVISIBLE
-                textView3.visibility = View.VISIBLE
-                Toast.makeText(applicationContext, "Connection not Available", Toast.LENGTH_SHORT)
-                    .show()
+                textView3.visibility = View.INVISIBLE
+                connectionNotAvailable.visibility = View.VISIBLE
+                textConnection.visibility = View.VISIBLE
             }
         })
     }

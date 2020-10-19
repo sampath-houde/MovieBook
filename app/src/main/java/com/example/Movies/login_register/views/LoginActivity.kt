@@ -44,7 +44,10 @@ class LoginActivity : AppCompatActivity() {
             if(i==2){loginSuccessfull()}
         }
 
-
+        btn_forgot.setOnClickListener {
+            val intent = Intent(this, ForgotPassword1Activity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun loginSuccessfull() {
@@ -71,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun setUserSessionIdAndLoginStatus() {
-        loginStatus = true
+        if(materialCheckBox.isChecked == true){loginStatus = true} else{loginStatus == false}
         val sharedPreferences2: SharedPreferences =getSharedPreferences("LoginSession", MODE_PRIVATE)
         val editor2: SharedPreferences.Editor = sharedPreferences2.edit()
         editor2.putString("userSessionId", emailText.text.toString())

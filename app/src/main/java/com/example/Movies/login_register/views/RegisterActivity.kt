@@ -42,9 +42,14 @@ class RegisterActivity : AppCompatActivity() {
                 setAndAddAllData()
             }
         }
+
+        btn_login.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
-    public fun checkErrors() : Int {
+    private fun checkErrors() : Int {
 
         var i = 0
 
@@ -71,6 +76,8 @@ class RegisterActivity : AppCompatActivity() {
         if(user_password.text.toString().isEmpty())
         {
             passwordEditTextLayout.error = "*Enter Password"
+        } else if(user_password.text.contains(" ")){
+            passwordEditTextLayout.error = "No spaces allowed"
         } else {i++}
 
         return i;
