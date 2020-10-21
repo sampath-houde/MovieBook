@@ -1,6 +1,5 @@
 package com.example.Movies.mainpackage.api.views
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -8,16 +7,15 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.Movies.R
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_movie_description.*
 import kotlinx.android.synthetic.main.activity_movie_description.progressCardView
-import kotlin.properties.Delegates
 
 @Suppress("DEPRECATION")
-class MovieDescription : AppCompatActivity() {
+class MovieDescriptionFragment : Fragment() {
 
     lateinit var data1: String //movieName
     lateinit var data2: String //moviePlot
@@ -28,7 +26,7 @@ class MovieDescription : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie_description)
+        setContentView(R.layout.fragment_moviedescription)
         val imageview: ImageView = findViewById(R.id.imageView3) as ImageView
         val moviename: TextView = findViewById(R.id.movieName)
         val movierating: TextView = findViewById(R.id.rating2)
@@ -92,7 +90,7 @@ class MovieDescription : AppCompatActivity() {
                 else {
                     Toast.makeText(applicationContext, "Tickets added to Cart", Toast.LENGTH_SHORT)
                         .show()
-                    val intentBooking = Intent(this, CheckoutActivity::class.java)
+                    val intentBooking = Intent(this, CheckoutFragment::class.java)
                     intentBooking.putExtra("movieName", data1)
                     intentBooking.putExtra("moviePoster", data4)
                     intentBooking.putExtra("TicketCount", tickets)

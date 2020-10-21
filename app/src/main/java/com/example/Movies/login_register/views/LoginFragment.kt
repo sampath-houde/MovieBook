@@ -1,17 +1,15 @@
 package com.example.Movies.login_register.views
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Database
+import androidx.fragment.app.Fragment
 import com.example.Movies.R
 import com.example.Movies.userDataBase.UserDataBase
-import com.example.Movies.mainpackage.api.views.MovieList
+import com.example.Movies.mainpackage.api.views.MovieListFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -19,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import java.lang.reflect.Type
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginFragment : Fragment() {
 
     private lateinit var emailText:EditText
     private lateinit var passwordText: EditText
@@ -30,12 +28,12 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.fragment_login)
         passwordText = findViewById(R.id.passwordEditText)
         emailText = findViewById(R.id.emailEditText)
 
         btn_signup.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
+            val intent = Intent(this, RegisterFragment::class.java)
             startActivity(intent)
         }
 
@@ -45,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btn_forgot.setOnClickListener {
-            val intent = Intent(this, ForgotPassword1Activity::class.java)
+            val intent = Intent(this, ForgotPassword1Fragment::class.java)
             startActivity(intent)
         }
     }
@@ -57,14 +55,14 @@ class LoginActivity : AppCompatActivity() {
                     Snackbar.make(btn_login, "User doesn't exist", Snackbar.LENGTH_LONG)
                         .setAction("Register")
                         {
-                            val intent = Intent(this, RegisterActivity::class.java)
+                            val intent = Intent(this, RegisterFragment::class.java)
                             startActivity(intent)
                         }.show()
                 } else if (userEmpty_list.get(i).user_password == passwordText.text.toString()) {
                     Toast.makeText(applicationContext, "Login Successfull", Toast.LENGTH_SHORT)
                         .show()
                     setUserSessionIdAndLoginStatus()
-                    val intentMovieList = Intent(this, MovieList::class.java)
+                    val intentMovieList = Intent(this, MovieListFragment::class.java)
                     startActivity(intentMovieList)
                 } else {
                     Snackbar.make(btn_login, "Invalid Combination", Snackbar.LENGTH_LONG).show()

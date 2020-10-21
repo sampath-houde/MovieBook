@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
@@ -24,7 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 @Suppress("DEPRECATION")
-class MovieSearch : AppCompatActivity() {
+class MovieSearchFragment : Fragment() {
 
     private lateinit var progrressCardView: CardView
 
@@ -47,7 +48,7 @@ class MovieSearch : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie_search)
+        setContentView(R.layout.fragment_moviesearch)
 
         progressTextView = findViewById(R.id.connecting)
         proressLayout = findViewById(R.id.progressConstraint)

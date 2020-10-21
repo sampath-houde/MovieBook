@@ -2,9 +2,8 @@ package com.example.Movies.mainpackage.api.views
 
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.annotation.NonNull
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
@@ -13,10 +12,9 @@ import com.example.Movies.userDataBase.UserDataBase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_user_bookings.*
-import kotlinx.android.synthetic.main.user_bookings_view.*
 import java.lang.reflect.Type
 
-class UserBookings : AppCompatActivity() {
+class UserBookingsFragment : Fragment() {
 
     private lateinit var myAdapter3: MyAdapter3
 
@@ -32,7 +30,7 @@ class UserBookings : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_bookings)
+        setContentView(R.layout.fragment_userbookings)
 
         recyclerView = findViewById(R.id.recyclerView3)
 
@@ -53,7 +51,7 @@ class UserBookings : AppCompatActivity() {
         setDataToRecycle3(newUserBookedMovieInfo)
 
         returnHome.setOnClickListener {
-            val intent = Intent(this, MovieList::class.java)
+            val intent = Intent(this, MovieListFragment::class.java)
             startActivity(intent)
         }
     }
@@ -75,7 +73,7 @@ class UserBookings : AppCompatActivity() {
 
     private fun setDataToRecycle3(userMovieBookedList: ArrayList<UserDataBase.Movie_booked>) {
         myAdapter3 = MyAdapter3(this, userMovieBookedList)
-        val intent = Intent(this, MovieDescription::class.java)
+        val intent = Intent(this, MovieDescriptionFragment::class.java)
         recyclerView.adapter = myAdapter3
         recyclerView.layoutManager = LinearLayoutManager(this)
     }

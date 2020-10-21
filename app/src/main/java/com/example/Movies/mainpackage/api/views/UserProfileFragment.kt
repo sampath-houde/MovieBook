@@ -2,22 +2,20 @@ package com.example.Movies.mainpackage.api.views
 
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.Movies.R
-import com.example.Movies.login_register.views.LoginActivity
-import com.example.Movies.login_register.views.RegisterActivity
+import com.example.Movies.login_register.views.LoginFragment
 import com.example.Movies.userDataBase.UserDataBase
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import java.lang.reflect.Type
 
-class UserProfile : AppCompatActivity() {
+class UserProfileFragment : Fragment() {
 
     private lateinit var user_data: ArrayList<UserDataBase>
     private lateinit var profile_name: TextView
@@ -27,7 +25,7 @@ class UserProfile : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_profile)
+        setContentView(R.layout.fragment_userprofile)
 
         profile_name = findViewById(R.id.profileName)
         profile_email = findViewById(R.id.profileEmail)
@@ -40,14 +38,14 @@ class UserProfile : AppCompatActivity() {
         fetchDetailsOfCurrentUser()
 
         myBookings.setOnClickListener {
-            val intent = Intent(this, UserBookings::class.java)
+            val intent = Intent(this, UserBookingsFragment::class.java)
             startActivity(intent)
         }
 
         btn_logout.setOnClickListener {
             Toast.makeText(applicationContext, "Logout Successful", Toast.LENGTH_SHORT).show()
             setUserLoginStatus()
-            val intentLogout = Intent(this, LoginActivity::class.java)
+            val intentLogout = Intent(this, LoginFragment::class.java)
             startActivity(intentLogout)
         }
     }

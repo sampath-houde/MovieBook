@@ -1,7 +1,6 @@
 package com.example.Movies.mainpackage.api.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,21 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.Movies.R;
-import com.example.Movies.mainpackage.api.model.MovieSearchList;
-import com.example.Movies.mainpackage.api.views.MovieDescription;
-import com.example.Movies.mainpackage.api.views.UserBookings;
 import com.example.Movies.userDataBase.UserDataBase;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
 

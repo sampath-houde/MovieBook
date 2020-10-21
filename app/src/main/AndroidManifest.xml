@@ -12,34 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity
-            android:name=".login_register.views.ForgotPassword1Activity"/>
-        <activity android:name=".mainpackage.api.views.UserBookings" />
-        <activity android:name=".mainpackage.api.views.CheckoutActivity" />
-        <activity android:name=".mainpackage.api.views.UserProfile" />
-        <activity
-            android:name=".SplashScreen"
-            android:label="Movie Finder"
-            android:screenOrientation="portrait">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login_register.views.ForgotPasswordActivity2"/>
-        <activity android:name=".login_register.views.LoginActivity"/>
-        <activity android:name=".login_register.views.RegisterActivity" />
-        <activity
-            android:name=".mainpackage.api.views.MovieList"
-            android:label="Movie List" />
-        <activity
-            android:name=".mainpackage.api.views.MovieSearch"
-            android:label="Movie Search" />
-        <activity
-            android:name=".mainpackage.api.views.MovieDescription"
-            android:label="Movie Details" />
 
         <meta-data
             android:name="preloaded_fonts"

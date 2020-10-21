@@ -5,33 +5,29 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
-import com.example.Movies.login_register.views.LoginActivity
+import com.example.Movies.login_register.views.LoginFragment
 import com.example.Movies.mainpackage.api.ApiInterface.OMDBapi
 import com.example.Movies.mainpackage.api.ApiInterface.RetrofitInstance
 import com.example.Movies.mainpackage.api.adapter.MyAdapter
 import com.example.Movies.mainpackage.api.model.MovieTrending
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.movie_list2.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.log
 
 @Suppress("DEPRECATION")
-class MovieList : AppCompatActivity(){
+class MovieListFragment : Fragment(){
 
     private lateinit var drawerLayoutManager: DrawerLayout
     private lateinit var navigationView: NavigationView
@@ -44,7 +40,7 @@ class MovieList : AppCompatActivity(){
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.movie_list2)
+        setContentView(R.layout.fragment_movietrending)
 
         toolBarMenu()
         setupNavigationDrawer()
@@ -60,19 +56,19 @@ class MovieList : AppCompatActivity(){
                 }
 
                 R.id.Search -> {
-                    val intent = Intent(this, MovieSearch::class.java)
+                    val intent = Intent(this, MovieSearchFragment::class.java)
                     startActivity(intent)
                 }
 
                 R.id.logout -> {
                     Toast.makeText(applicationContext, "Logout Successful", Toast.LENGTH_SHORT).show()
                     setUserLoginStatus()
-                    val intentLogout = Intent(this,LoginActivity::class.java)
+                    val intentLogout = Intent(this,LoginFragment::class.java)
                     startActivity(intentLogout)
                 }
 
                 R.id.profileSection -> {
-                    val intentProfile = Intent(this, UserProfile::class.java)
+                    val intentProfile = Intent(this, UserProfileFragment::class.java)
                     startActivity(intentProfile)
                 }
 
@@ -136,7 +132,7 @@ class MovieList : AppCompatActivity(){
 
     private fun setDataToRecycler(body: MovieTrending) {
         myAdapter = MyAdapter(this, body.results)
-        val intent = Intent(this, MovieDescription::class.java)
+        val intent = Intent(this, MovieDescriptionFragment::class.java)
         recyclerView.adapter = myAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 

@@ -2,11 +2,11 @@ package com.example.Movies.mainpackage.api.views
 
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.Movies.R
 import com.example.Movies.userDataBase.UserDataBase
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_movie_description.*
 import java.lang.reflect.Type
 import kotlin.properties.Delegates
 
-class CheckoutActivity : AppCompatActivity() {
+class CheckoutFragment : Fragment() {
 
     private lateinit var movieName: TextView
     private lateinit var moviePoster: ImageView
@@ -35,7 +35,7 @@ class CheckoutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_checkout)
+        setContentView(R.layout.fragment_checkout)
 
         movieName = findViewById(R.id.movieName)
         moviePoster = findViewById(R.id.movieImage)
@@ -47,7 +47,7 @@ class CheckoutActivity : AppCompatActivity() {
 
         btn_no.setOnClickListener {
             Toast.makeText(applicationContext, "Booking Cancelled", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MovieList::class.java)
+            val intent = Intent(this, MovieListFragment::class.java)
             startActivity(intent)
         }
 
@@ -58,7 +58,7 @@ class CheckoutActivity : AppCompatActivity() {
             getPositionOfLoggedInUser()
             setBookedTikcetsInfoInLoggedInUser()
             Toast.makeText(applicationContext, "Tickets Booked Successfully", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, UserBookings::class.java)
+            val intent = Intent(this, UserBookingsFragment::class.java)
             startActivity(intent)
         }
 

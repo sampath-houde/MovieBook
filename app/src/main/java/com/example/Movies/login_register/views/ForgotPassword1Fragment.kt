@@ -4,12 +4,10 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.Movies.R
-import com.example.Movies.mainpackage.api.views.MovieList
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -19,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_forgotpassword1.emailInputLayout
 import kotlinx.android.synthetic.main.activity_login.*
 import java.lang.reflect.Type
 
-class ForgotPassword1Activity : AppCompatActivity() {
+class ForgotPassword1Fragment : Fragment() {
 
     private lateinit var phoneText: TextView
     private lateinit var emailText: TextView
@@ -27,7 +25,7 @@ class ForgotPassword1Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forgotpassword1)
+        setContentView(R.layout.fragment_forgotpassword1)
 
         phoneText = findViewById(R.id.phoneEditText)
         emailText = findViewById(R.id.emailEditText)
@@ -49,13 +47,13 @@ class ForgotPassword1Activity : AppCompatActivity() {
                 Snackbar.make(btn_next, "User doesn't exist", Snackbar.LENGTH_LONG)
                     .setAction("Register")
                     {
-                        val intent = Intent(this, RegisterActivity::class.java)
+                        val intent = Intent(this, RegisterFragment::class.java)
                         startActivity(intent)
                     }.show()
             } else if (useremptyList.get(i).user_phone == phoneText.text.toString() && useremptyList.get(i).user_email == emailText.text.toString()) {
                 Toast.makeText(applicationContext, "User Found", Toast.LENGTH_SHORT)
                     .show()
-                val intent = Intent(this, ForgotPasswordActivity2::class.java)
+                val intent = Intent(this, ForgotPassword2Fragment::class.java)
                 intent.putExtra("key", i)
                 startActivity(intent)
             } else {

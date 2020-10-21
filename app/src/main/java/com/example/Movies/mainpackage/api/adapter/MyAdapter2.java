@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.Movies.mainpackage.api.model.MovieSearchList;
 import com.example.Movies.R;
-import com.example.Movies.mainpackage.api.views.MovieDescription;
+import com.example.Movies.mainpackage.api.views.MovieDescriptionFragment;
 
 import java.util.List;
 
@@ -71,7 +71,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MovieDescription.class);
+                Intent intent = new Intent(context, MovieDescriptionFragment.class);
                 if(movieList.get(position).getOriginalTitle() == null)
                 {
                     intent.putExtra("movieName", movieList.get(position).getOriginalName());

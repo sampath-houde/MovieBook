@@ -3,11 +3,9 @@ package com.example.Movies.login_register.views
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
-import android.view.View.*
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.Movies.R
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.gson.Gson
@@ -15,7 +13,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_forgotpassword2.*
 import java.lang.reflect.Type
 
-class ForgotPasswordActivity2 : AppCompatActivity() {
+class ForgotPassword2Fragment : Fragment() {
 
     private lateinit var userEmpty_list: ArrayList<UserDataBase>
 
@@ -25,7 +23,7 @@ class ForgotPasswordActivity2 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forgotpassword2)
+        setContentView(R.layout.fragment_forgotpassword2)
 
 
         password1 = findViewById(R.id.passwordEditText)
@@ -47,7 +45,7 @@ class ForgotPasswordActivity2 : AppCompatActivity() {
         userEmpty_list.get(i).user_password = password2.text.toString()
         updateUserList()
         Toast.makeText(applicationContext, "Password Updated", Toast.LENGTH_SHORT).show()
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, LoginFragment::class.java)
         startActivity(intent)
     }
 
