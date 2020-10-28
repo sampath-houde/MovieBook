@@ -44,4 +44,5 @@
     <string name="favourite_icon">favourite icon</string>
     <string name="favoutite_button">Favoutite button</string>
     <string name="favourites">Favourites</string>
+    <string name="login">Login</string>
 </resources>

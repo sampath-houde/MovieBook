@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
-            android:text="Login"
+            android:text="@string/login"
             android:textColor="@color/colorPrimary"
             android:textSize="50dp"
             app:layout_constraintEnd_toEndOf="parent"

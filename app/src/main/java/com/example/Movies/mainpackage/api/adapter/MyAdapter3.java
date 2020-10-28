@@ -1,6 +1,7 @@
 package com.example.Movies.mainpackage.api.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.Movies.R;
 import com.example.Movies.databinding.UserBookingsViewBinding;
 import com.example.Movies.userDataBase.UserDataBase;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -59,10 +61,24 @@ public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
         holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                movieBookedList.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, movieBookedList.size());
-                removeMovieObject(movieBookedList);
+                new MaterialAlertDialogBuilder(context)
+                        .setTitle("Cancel Ticket")
+                        .setMessage("Do you want to cancel the ticket")
+                        .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                movieBookedList.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, movieBookedList.size());
+                                removeMovieObject(movieBookedList);
+                            }
+                        }).show();
             }
         });
 

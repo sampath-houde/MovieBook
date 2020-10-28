@@ -18,6 +18,7 @@ import com.example.Movies.databinding.FragmentLoginBinding
 import com.example.Movies.mainpackage.api.MainActivity
 import com.example.Movies.userDataBase.UserDataBase
 import com.example.Movies.mainpackage.api.views.MovieTrendingFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -56,6 +57,8 @@ class LoginFragment : Fragment() {
             val i = validateCheck()
             if(i==2){loginSuccessfull()}
         }
+
+
 
         binding.btnForgot.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_forgotPassword1Fragment)

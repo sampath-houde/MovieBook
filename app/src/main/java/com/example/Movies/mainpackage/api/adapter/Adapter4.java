@@ -1,6 +1,7 @@
 package com.example.Movies.mainpackage.api.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.Movies.R;
 import com.example.Movies.databinding.MyViewBinding;
 import com.example.Movies.userDataBase.UserDataBase;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -55,10 +57,23 @@ public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
         holder.wishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                movieFavourites.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, movieFavourites.size());
-                removeMovieObject(movieFavourites);
+                new MaterialAlertDialogBuilder(context)
+                        .setMessage("Are you sure you want to remove this from your wishlist")
+                        .setPositiveButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                movieFavourites.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, movieFavourites.size());
+                                removeMovieObject(movieFavourites);
+                            }
+                        }).show();
             }
         });
     }
