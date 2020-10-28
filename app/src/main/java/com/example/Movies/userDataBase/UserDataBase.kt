@@ -1,23 +1,37 @@
 package com.example.Movies.userDataBase
 
+import android.os.Bundle
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
+import java.io.StringReader
 import kotlin.properties.Delegates
 
 
-class UserDataBase() : Serializable{
+class UserDataBase() : Serializable {
 
-    public lateinit var user_name: String
-    public lateinit var user_email: String
-    public lateinit var user_phone: String
-    public lateinit var user_password: String
-    public  var movie_booked = ArrayList<Movie_booked>()
+    lateinit var user_name: String
+    lateinit var user_email: String
+    lateinit var user_phone: String
+    lateinit var user_password: String
+    var movie_booked = ArrayList<Movie_booked>()
+    var movie_favourites = ArrayList<Movie_Favourites>();
 
+    class Movie_booked : Serializable {
+        lateinit var movie_name: String
+        lateinit var movie_tikcets: String
+        lateinit var movie_poster: String
+    }
 
-    class Movie_booked : Serializable{
-        public lateinit var movie_name: String
-        public lateinit var movie_tikcets: String
-        public lateinit var movie_poster: String
+    class Movie_Favourites : Serializable {
+        var id: Int = -1
+        var wishlist: Boolean = false
+        lateinit var movie_name: String
+        lateinit var movie_date: String
+        lateinit var movie_showType: String
+        lateinit var movie_Votes: String
+        lateinit var movie_Poster: String
+        lateinit var movie_Rating: String
+        lateinit var movie_Description: String
     }
     /* private var user_name: String=""
          get() = field
@@ -59,5 +73,4 @@ class UserDataBase() : Serializable{
         return user_password
     }
     fun setUser_password(user_password:String){this.user_password = user_password}*/
-
 }

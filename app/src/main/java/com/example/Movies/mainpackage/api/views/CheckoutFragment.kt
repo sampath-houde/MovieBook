@@ -1,24 +1,34 @@
+/*
+
 package com.example.Movies.mainpackage.api.views
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.Movies.R
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_checkout.*
-import kotlinx.android.synthetic.main.activity_movie_description.*
+import kotlinx.android.synthetic.main.fragment_checkout.*
+import kotlinx.android.synthetic.main.fragment_checkout.view.*
 import java.lang.reflect.Type
 import kotlin.properties.Delegates
 
 class CheckoutFragment : Fragment() {
 
+    val args: CheckoutFragmentArgs by navArgs()
     private lateinit var movieName: TextView
     private lateinit var moviePoster: ImageView
     private lateinit var movieTickets: TextView
@@ -33,39 +43,39 @@ class CheckoutFragment : Fragment() {
 
     private lateinit var user_data: ArrayList<UserDataBase>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_checkout)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_checkout, container, false)
 
-        movieName = findViewById(R.id.movieName)
-        moviePoster = findViewById(R.id.movieImage)
-        movieTickets = findViewById(R.id.ticketCount)
+        movieName = view.findViewById(R.id.movieName)
+        moviePoster = view.findViewById(R.id.movieImage)
+        movieTickets = view.findViewById(R.id.ticketCount)
 
         getDataFromIntent()
 
         setDataFromIntent()
 
-        btn_no.setOnClickListener {
-            Toast.makeText(applicationContext, "Booking Cancelled", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MovieListFragment::class.java)
-            startActivity(intent)
+        view.btn_no.setOnClickListener {
+            Toast.makeText(context, "Booking Cancelled", Toast.LENGTH_SHORT).show()
+            view?.findNavController()!!.navigate(R.id.movieListFragment)
         }
 
-        btn_yes.setOnClickListener {
-
+        view.btn_yes.setOnClickListener {
             getCurrentUserSessionIdFromIntent()
             getUserList()
             getPositionOfLoggedInUser()
             setBookedTikcetsInfoInLoggedInUser()
-            Toast.makeText(applicationContext, "Tickets Booked Successfully", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, UserBookingsFragment::class.java)
-            startActivity(intent)
+            Toast.makeText(context, "Tickets Booked Successfully", Toast.LENGTH_SHORT).show()
+            view?.findNavController()!!.navigate(R.id.userBookingsFragment)
         }
-
+        return view
     }
 
     private fun updateUserList() {
-        val sharedPreferences: SharedPreferences = getSharedPreferences("Main", MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = context?.getSharedPreferences("Main", MODE_PRIVATE)!!
         val editor = sharedPreferences.edit()
         val gson: Gson = Gson()
         val json: String = gson.toJson(user_data)
@@ -117,18 +127,18 @@ class CheckoutFragment : Fragment() {
     }
 
     private fun getDataFromIntent() {
-        data2 = intent.getStringExtra("moviePoster")!!
-        data1 = intent.getStringExtra("movieName")!!
-        data3 = intent.getIntExtra("TicketCount", -1)
+        data2 = args.moviePoster!!
+        data1 = args.movieName!!
+        data3 = args.ticketCount
     }
 
     private fun getCurrentUserSessionIdFromIntent() {
-        val sharedPreferences2 = getSharedPreferences("LoginSession", MODE_PRIVATE)
-        sessionId = sharedPreferences2.getString("userSessionId", null).toString()
+        val sharedPreferences = context?.getSharedPreferences("LoginSession", MODE_PRIVATE)
+        sessionId = sharedPreferences?.getString("userSessionId", null).toString()
     }
 
     fun getUserList() {
-        val sharedPreferences2: SharedPreferences = getSharedPreferences("Main", MODE_PRIVATE)
+        val sharedPreferences2: SharedPreferences = context?.getSharedPreferences("Main", MODE_PRIVATE)!!
         val gson = Gson()
         val json = sharedPreferences2.getString("activity", null)
         val type: Type = object : TypeToken<ArrayList<UserDataBase>>() {}.type
@@ -140,3 +150,37 @@ class CheckoutFragment : Fragment() {
         }
     }
 }
+
+
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.fragment_checkout)
+
+    movieName = findViewById(R.id.movieName)
+    moviePoster = findViewById(R.id.movieImage)
+    movieTickets = findViewById(R.id.ticketCount)
+
+    getDataFromIntent()
+
+    setDataFromIntent()
+
+    btn_no.setOnClickListener {
+        Toast.makeText(applicationContext, "Booking Cancelled", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, MovieTrendingFragment::class.java)
+        startActivity(intent)
+    }
+
+    btn_yes.setOnClickListener {
+
+        getCurrentUserSessionIdFromIntent()
+        getUserList()
+        getPositionOfLoggedInUser()
+        setBookedTikcetsInfoInLoggedInUser()
+        Toast.makeText(applicationContext, "Tickets Booked Successfully", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, UserBookingsFragment::class.java)
+        startActivity(intent)
+    }
+
+}
+*/

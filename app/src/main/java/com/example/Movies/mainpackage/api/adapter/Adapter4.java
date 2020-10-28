@@ -5,11 +5,12 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -21,49 +22,48 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
+public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
 
     private ArrayList<UserDataBase> user_data;
 
     Context context;
-    ArrayList<UserDataBase.Movie_booked> movieBookedList;
+    ArrayList<UserDataBase.Movie_Favourites> movieFavourites;
 
-    public MyAdapter3(Context c, ArrayList<UserDataBase.Movie_booked> movieBookedList) {
+    public Adapter4(Context c, ArrayList<UserDataBase.Movie_Favourites> movieFavouritesList) {
         this.context = c;
-        this.movieBookedList = movieBookedList;
+        this.movieFavourites = movieFavouritesList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.user_bookings_view, parent, false);
-        return new ViewHolder(view);
+        View view = inflater.inflate(R.layout.my_view, parent, false);
+        return new Adapter4.ViewHolder(view);
     }
 
-
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.moviename.setText(movieBookedList.get(position).movie_name);
-        if(movieBookedList.get(position).movie_poster == null){
-            holder.img.setImageResource(R.drawable.ic_baseline_broken_image_24);
-        }
-        else {
-            Glide.with(context).
-                    load(movieBookedList.get(position).movie_poster)
-                    .into(holder.img);
-        }
-        holder.movieTickets.setText(movieBookedList.get(position).movie_tikcets);
-        holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.moviename.setText(movieFavourites.get(position).movie_name);
+        String s1 = movieFavourites.get(position).movie_Poster;
+        Glide.with(context).
+                load("https://image.tmdb.org/t/p/w500/" + s1)
+                .into(holder.img);
+        holder.movieType.setText(movieFavourites.get(position).movie_showType);
+        holder.wishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                movieBookedList.remove(position);
+                movieFavourites.remove(position);
                 notifyItemRemoved(position);
-                notifyItemRangeChanged(position, movieBookedList.size());
-                removeMovieObject(movieBookedList);
+                notifyItemRangeChanged(position, movieFavourites.size());
+                removeMovieObject(movieFavourites);
             }
         });
+    }
 
+    @Override
+    public int getItemCount() {
+        return movieFavourites.size();
     }
 
     private void updateMovieBookedList(ArrayList<UserDataBase> updatedList) {
@@ -75,10 +75,10 @@ public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
         edit.apply();
     }
 
-    private void removeMovieObject(ArrayList<UserDataBase.Movie_booked> movieBookedList) {
+    private void removeMovieObject(ArrayList<UserDataBase.Movie_Favourites> movie_favourites) {
         getUserList();
         int pos = getPositionOfUserLoggedInUser();
-        user_data.get(pos).setMovie_booked(movieBookedList);
+        user_data.get(pos).setMovie_favourites(movie_favourites);
         updateMovieBookedList(user_data);
     }
 
@@ -107,23 +107,24 @@ public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return movieBookedList.size();
-    }
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView moviename, movieTickets;
+        TextView moviename, movieType;
         ImageView img;
-        Button cancel_btn;
+        ImageButton wishlist;
+        ConstraintLayout constraintLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             moviename = itemView.findViewById(R.id.movieName);
-            img = itemView.findViewById(R.id.movieImage);
-            movieTickets = itemView.findViewById(R.id.ticketCount);
-            cancel_btn = itemView.findViewById(R.id.btn_cancel);
+            img = itemView.findViewById(R.id.imageView1);
+            movieType = itemView.findViewById(R.id.adult);
+            wishlist = itemView.findViewById(R.id.btn_favicon);
+            //constraintLayout = itemView.findViewById(R.id.contraintLayout2);
+
+            wishlist.setImageResource(R.drawable.ic_baseline_favorite_24_red);
         }
     }
 }
+
+

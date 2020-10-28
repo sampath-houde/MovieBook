@@ -1,18 +1,25 @@
 package com.example.Movies.mainpackage.api.views
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.example.Movies.R
 import com.example.Movies.login_register.views.LoginFragment
+import com.example.Movies.login_register.views.LoginRegisterActivity
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_user_profile.*
+import kotlinx.android.synthetic.main.fragment_userprofile.*
+import kotlinx.android.synthetic.main.fragment_userprofile.view.*
 import java.lang.reflect.Type
 
 class UserProfileFragment : Fragment() {
@@ -23,13 +30,16 @@ class UserProfileFragment : Fragment() {
     private lateinit var profile_number: TextView
     private lateinit var sessionId: String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_userprofile)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_userprofile, container, false)
 
-        profile_name = findViewById(R.id.profileName)
-        profile_email = findViewById(R.id.profileEmail)
-        profile_number = findViewById(R.id.profileNumber)
+        profile_name = view.findViewById(R.id.profileName)
+        profile_email = view.findViewById(R.id.profileEmail)
+        profile_number = view.findViewById(R.id.profileNumber)
 
         getCurrentUserSessionId()
 
@@ -37,28 +47,35 @@ class UserProfileFragment : Fragment() {
 
         fetchDetailsOfCurrentUser()
 
-        myBookings.setOnClickListener {
-            val intent = Intent(this, UserBookingsFragment::class.java)
+        view.myBookings.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.userBookingsFragment)
+        }
+
+        view.btn_logout.setOnClickListener {
+            Toast.makeText(context, "Logout Successful", Toast.LENGTH_SHORT).show()
+            setUserLoginStatus()
+            val intent = Intent(context, LoginRegisterActivity::class.java)
             startActivity(intent)
         }
 
-        btn_logout.setOnClickListener {
-            Toast.makeText(applicationContext, "Logout Successful", Toast.LENGTH_SHORT).show()
-            setUserLoginStatus()
-            val intentLogout = Intent(this, LoginFragment::class.java)
-            startActivity(intentLogout)
+        view.my_toolbar.setTitle("Profile")
+        view.my_toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+        view.my_toolbar.setNavigationOnClickListener {
+            Navigation.findNavController(view).navigateUp()
         }
+
+        return view
     }
 
     private fun setUserLoginStatus() {
-        val loginStatus: SharedPreferences = getSharedPreferences("LoginSession", MODE_PRIVATE)
+        val loginStatus = context?.getSharedPreferences("LoginSession", MODE_PRIVATE)!!
         val editor: SharedPreferences.Editor = loginStatus.edit()
         editor.putBoolean("userLoginStatus", false)
         editor.apply()
     }
 
     fun getUserList() {
-        val sharedPreferences2: SharedPreferences = getSharedPreferences("Main", MODE_PRIVATE)
+        val sharedPreferences2 = context?.getSharedPreferences("Main", MODE_PRIVATE)!!
         val gson = Gson()
         val json = sharedPreferences2.getString("activity", null)
         val type: Type = object : TypeToken<ArrayList<UserDataBase>>() {}.type
@@ -81,8 +98,37 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun getCurrentUserSessionId() {
-        val sharedPreferences2 = getSharedPreferences("LoginSession", MODE_PRIVATE)
+        val sharedPreferences2 = activity?.getSharedPreferences("LoginSession", MODE_PRIVATE)!!
         sessionId = sharedPreferences2.getString("userSessionId", null).toString()
     }
 
 }
+
+
+/*override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.fragment_userprofile)
+
+    profile_name = findViewById(R.id.profileName)
+    profile_email = findViewById(R.id.profileEmail)
+    profile_number = findViewById(R.id.profileNumber)
+
+    getCurrentUserSessionId()
+
+    getUserList()
+
+    fetchDetailsOfCurrentUser()
+
+    myBookings.setOnClickListener {
+        val intent = Intent(this, UserBookingsFragment::class.java)
+        startActivity(intent)
+    }
+
+    btn_logout.setOnClickListener {
+        Toast.makeText(applicationContext, "Logout Successful", Toast.LENGTH_SHORT).show()
+        setUserLoginStatus()
+        val intentLogout = Intent(this, LoginFragment::class.java)
+        startActivity(intentLogout)
+    }
+}
+*/

@@ -6,39 +6,27 @@
     android:layout_height="match_parent"
     tools:context="com.example.Movies.mainpackage.api.views.UserBookingsFragment">
 
-    <TextView
-        android:id="@+id/userBookings"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Bookings"
-        android:textColor="@color/colorPrimary"
-        android:textSize="45dp"
-        android:layout_marginTop="30dp"
+        android:background="@color/colorPrimary"
+        android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/returnHome"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Return Home"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userBookings" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_baseline_dehaze_24"
+        app:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView3"
         android:layout_width="match_parent"
+        android:layout_marginTop="70dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="180dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/returnHome" />
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,19 +1,27 @@
 package com.example.Movies.login_register.views
 
 import android.annotation.SuppressLint
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.example.Movies.R
+import com.example.Movies.mainpackage.api.MainActivity
 import com.example.Movies.userDataBase.UserDataBase
-import com.example.Movies.mainpackage.api.views.MovieListFragment
+import com.example.Movies.mainpackage.api.views.MovieTrendingFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.view.*
 import java.lang.reflect.Type
 
 
@@ -26,26 +34,30 @@ class LoginFragment : Fragment() {
 
     private  var loginStatus: Boolean = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_login)
-        passwordText = findViewById(R.id.passwordEditText)
-        emailText = findViewById(R.id.emailEditText)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_login, container, false)
 
-        btn_signup.setOnClickListener {
-            val intent = Intent(this, RegisterFragment::class.java)
-            startActivity(intent)
+        passwordText = view.findViewById(R.id.passwordEditText)
+        emailText = view.findViewById(R.id.emailEditText)
+
+        view.btn_signup.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
-        btn_login.setOnClickListener {
+        view.btn_login.setOnClickListener {
             val i = validateCheck()
             if(i==2){loginSuccessfull()}
         }
 
-        btn_forgot.setOnClickListener {
-            val intent = Intent(this, ForgotPassword1Fragment::class.java)
-            startActivity(intent)
+        view.btn_forgot.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_forgotPassword1Fragment)
         }
+
+        return view
     }
 
     private fun loginSuccessfull() {
@@ -55,15 +67,15 @@ class LoginFragment : Fragment() {
                     Snackbar.make(btn_login, "User doesn't exist", Snackbar.LENGTH_LONG)
                         .setAction("Register")
                         {
-                            val intent = Intent(this, RegisterFragment::class.java)
-                            startActivity(intent)
+                            view?.findNavController()!!.navigate(R.id.action_loginFragment_to_registerFragment)
                         }.show()
                 } else if (userEmpty_list.get(i).user_password == passwordText.text.toString()) {
-                    Toast.makeText(applicationContext, "Login Successfull", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "Login Successfull", Toast.LENGTH_SHORT)
                         .show()
                     setUserSessionIdAndLoginStatus()
-                    val intentMovieList = Intent(this, MovieListFragment::class.java)
-                    startActivity(intentMovieList)
+                    val intent = Intent(context, MainActivity::class.java)
+                    startActivity(intent)
+                    activity?.finish()
                 } else {
                     Snackbar.make(btn_login, "Invalid Combination", Snackbar.LENGTH_LONG).show()
                 }
@@ -73,7 +85,7 @@ class LoginFragment : Fragment() {
 
     private fun setUserSessionIdAndLoginStatus() {
         if(materialCheckBox.isChecked == true){loginStatus = true} else{loginStatus == false}
-        val sharedPreferences2: SharedPreferences =getSharedPreferences("LoginSession", MODE_PRIVATE)
+        val sharedPreferences2= context?.getSharedPreferences("LoginSession", MODE_PRIVATE)!!
         val editor2: SharedPreferences.Editor = sharedPreferences2.edit()
         editor2.putString("userSessionId", emailText.text.toString())
         editor2.putBoolean("userLoginStatus", loginStatus)
@@ -101,7 +113,7 @@ class LoginFragment : Fragment() {
     }
 
     fun getUserList() {
-        val sharedPreferences2: SharedPreferences = getSharedPreferences("Main", MODE_PRIVATE)
+        val sharedPreferences2: SharedPreferences = context?.getSharedPreferences("Main", MODE_PRIVATE)!!
         val gson = Gson()
         val json = sharedPreferences2.getString("activity", null)
         val type: Type = object : TypeToken<ArrayList<UserDataBase>>() {}.type
@@ -114,3 +126,27 @@ class LoginFragment : Fragment() {
     }
 
 }
+
+
+/*override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.fragment_login)
+    passwordText = findViewById(R.id.passwordEditText)
+    emailText = findViewById(R.id.emailEditText)
+
+    btn_signup.setOnClickListener {
+        val intent = Intent(this, RegisterFragment::class.java)
+        startActivity(intent)
+    }
+
+    btn_login.setOnClickListener {
+        val i = validateCheck()
+        if(i==2){loginSuccessfull()}
+    }
+
+    btn_forgot.setOnClickListener {
+        val intent = Intent(this, ForgotPassword1Fragment::class.java)
+        startActivity(intent)
+    }
+}
+*/

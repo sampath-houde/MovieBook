@@ -2,14 +2,17 @@ package com.example.Movies.mainpackage.api.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -52,6 +55,8 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
             holder.moviename.setText(movieList.get(position).getOriginalTitle());
         }
 
+        holder.btn_fav.setVisibility(View.INVISIBLE);
+
         holder.movierating.setText(movieList.get(position).getVoteAverage().toString());
         String str = movieList.get(position).getPosterPath();
         String s1="";
@@ -71,27 +76,29 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MovieDescriptionFragment.class);
+//                Intent intent = new Intent(context, MovieDescriptionFragment.class);
+                Bundle bundle = new Bundle();
                 if(movieList.get(position).getOriginalTitle() == null)
                 {
-                    intent.putExtra("movieName", movieList.get(position).getOriginalName());
+                    bundle.putString("movieName", movieList.get(position).getOriginalName());
                 }
                 else
                 {
-                    intent.putExtra("movieName", movieList.get(position).getOriginalTitle());
+                    bundle.putString("movieName", movieList.get(position).getOriginalTitle());
                 }
                 if(movieList.get(position).getPosterPath() != null)
                 {
-                    intent.putExtra("moviePoster", movieList.get(position).getPosterPath());
+                    bundle.putString("moviePoster", movieList.get(position).getPosterPath());
                 }
                 else
                 {
-                    intent.putExtra("moviePoster", "1");
+                    bundle.putString("moviePoster", "1");
                 }
-                intent.putExtra("movieDescription", movieList.get(position).getOverview());
-                intent.putExtra("movieDate", movieList.get(position).getReleaseDate());
-                intent.putExtra("movieVotes", movieList.get(position).getVoteCount().toString());
-                context.startActivity(intent);
+                bundle.putString("movieDescription", movieList.get(position).getOverview());
+                bundle.putString("movieDate", movieList.get(position).getReleaseDate());
+                bundle.putString("movieVotes", movieList.get(position).getVoteCount().toString());
+                MovieDescriptionFragment frag = new MovieDescriptionFragment();
+                Navigation.findNavController(v).navigate(R.id.action_movieSearchFragment_to_movieDescriptionFragment, bundle);
 
             }
         });
@@ -107,6 +114,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
         TextView moviename, movierating;
         ImageView img;
         ConstraintLayout mainLayout;
+        ImageButton btn_fav;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -114,6 +122,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
             movierating = itemView.findViewById(R.id.movieRating);
             img = itemView.findViewById(R.id.imageView1);
             mainLayout = itemView.findViewById(R.id.mainLayout);
+            btn_fav = itemView.findViewById(R.id.btn_favicon);
         }
     }
 }

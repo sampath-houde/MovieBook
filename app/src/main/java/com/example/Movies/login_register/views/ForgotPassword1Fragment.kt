@@ -1,20 +1,22 @@
 package com.example.Movies.login_register.views
 
 import android.content.Context.MODE_PRIVATE
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.example.Movies.R
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_forgotpassword1.*
-import kotlinx.android.synthetic.main.activity_forgotpassword1.emailInputLayout
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.fragment_forgotpassword1.*
+import kotlinx.android.synthetic.main.fragment_forgotpassword1.view.*
 import java.lang.reflect.Type
 
 class ForgotPassword1Fragment : Fragment() {
@@ -23,15 +25,18 @@ class ForgotPassword1Fragment : Fragment() {
     private lateinit var emailText: TextView
     private lateinit var userEmpty_list: ArrayList<UserDataBase>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_forgotpassword1)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_forgotpassword1,container,false)
 
-        phoneText = findViewById(R.id.phoneEditText)
-        emailText = findViewById(R.id.emailEditText)
+        phoneText = view.findViewById(R.id.phoneEditText)
+        emailText = view.findViewById(R.id.emailEditText)
 
 
-        btn_next.setOnClickListener {
+        view.btn_next.setOnClickListener {
             userEmpty_list = getUserList()
             val errors: Int = checkUserValidity()
             if (errors == 2) {
@@ -39,6 +44,11 @@ class ForgotPassword1Fragment : Fragment() {
             }
         }
 
+        view.btn_back.setOnClickListener {
+            Navigation.findNavController(view).navigateUp()
+        }
+
+        return view
     }
 
     private fun checkSucessfull(useremptyList: ArrayList<UserDataBase>) {
@@ -47,15 +57,16 @@ class ForgotPassword1Fragment : Fragment() {
                 Snackbar.make(btn_next, "User doesn't exist", Snackbar.LENGTH_LONG)
                     .setAction("Register")
                     {
-                        val intent = Intent(this, RegisterFragment::class.java)
-                        startActivity(intent)
+                        view?.findNavController()!!.navigate(R.id.action_forgotPassword1Fragment_to_registerFragment)
                     }.show()
             } else if (useremptyList.get(i).user_phone == phoneText.text.toString() && useremptyList.get(i).user_email == emailText.text.toString()) {
-                Toast.makeText(applicationContext, "User Found", Toast.LENGTH_SHORT)
+                Toast.makeText(context, "User Found", Toast.LENGTH_SHORT)
                     .show()
-                val intent = Intent(this, ForgotPassword2Fragment::class.java)
+                val action = ForgotPassword1FragmentDirections.actionForgotPassword1FragmentToForgotPassword2Fragment(i)
+                view?.findNavController()!!.navigate(action)
+               /* val intent = Intent(this, ForgotPassword2Fragment::class.java)
                 intent.putExtra("key", i)
-                startActivity(intent)
+                startActivity(intent)*/
             } else {
                 Snackbar.make(btn_next, "Invalid Combination", Snackbar.LENGTH_SHORT).show()
             }
@@ -91,7 +102,7 @@ class ForgotPassword1Fragment : Fragment() {
 
     fun getUserList(): ArrayList<UserDataBase> {
         val database: ArrayList<UserDataBase>
-        val sharedPreferences2: SharedPreferences = getSharedPreferences("Main", MODE_PRIVATE)
+        val sharedPreferences2 = context?.getSharedPreferences("Main", MODE_PRIVATE)!!
         val gson = Gson()
         val json = sharedPreferences2.getString("activity", null)
         val type: Type = object : TypeToken<ArrayList<UserDataBase>>() {}.type
@@ -104,3 +115,21 @@ class ForgotPassword1Fragment : Fragment() {
         return database
     }
 }
+
+/*override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.fragment_forgotpassword1)
+
+    phoneText = findViewById(R.id.phoneEditText)
+    emailText = findViewById(R.id.emailEditText)
+
+
+    btn_next.setOnClickListener {
+        userEmpty_list = getUserList()
+        val errors: Int = checkUserValidity()
+        if (errors == 2) {
+            checkSucessfull(userEmpty_list)
+        }
+    }
+
+}*/
