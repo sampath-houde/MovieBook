@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.Movies.databinding.MyViewBinding;
 import com.example.Movies.mainpackage.api.model.MovieSearchList;
 import com.example.Movies.R;
 import com.example.Movies.mainpackage.api.views.MovieDescriptionFragment;
@@ -27,6 +28,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
 
     Context context;
     List<MovieSearchList.Result> movieList;
+    MyViewBinding binding;
 
     public MyAdapter2(Context c, List<MovieSearchList.Result> movieList)
     {
@@ -38,8 +40,8 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.my_view, parent, false);
-        return new ViewHolder(view);
+        binding = MyViewBinding.inflate(inflater, parent, false);
+        return new ViewHolder(binding);
     }
 
 
@@ -116,13 +118,13 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
         ConstraintLayout mainLayout;
         ImageButton btn_fav;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            moviename = itemView.findViewById(R.id.movieName);
-            movierating = itemView.findViewById(R.id.movieRating);
-            img = itemView.findViewById(R.id.imageView1);
-            mainLayout = itemView.findViewById(R.id.mainLayout);
-            btn_fav = itemView.findViewById(R.id.btn_favicon);
+        public ViewHolder(MyViewBinding binding) {
+            super(binding.getRoot());
+            moviename = binding.movieName;
+            movierating = binding.movieRating;
+            img = binding.imageView1;
+            mainLayout = binding.mainLayout;
+            btn_fav = binding.btnFavicon;
         }
     }
 }

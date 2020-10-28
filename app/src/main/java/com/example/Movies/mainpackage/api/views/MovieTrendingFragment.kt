@@ -19,6 +19,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
+import com.example.Movies.databinding.FragmentMovietrendingBinding
 import com.example.Movies.login_register.views.LoginRegisterActivity
 import com.example.Movies.mainpackage.api.ApiInterface.OMDBapi
 import com.example.Movies.mainpackage.api.ApiInterface.RetrofitInstance
@@ -43,6 +44,7 @@ class MovieTrendingFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: MyAdapter
     private lateinit var toolbar: Toolbar
+    private var fragmentMovietrendingBinding: FragmentMovietrendingBinding? = null
 
 
     override fun onCreateView(
@@ -50,11 +52,14 @@ class MovieTrendingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_movietrending, container, false)
-        toolbar = view.findViewById(R.id.my_toolbar)
-        drawerLayoutManager = view.findViewById(R.id.drawerlayout)
+        val binding = FragmentMovietrendingBinding.inflate(inflater, container, false)
+        fragmentMovietrendingBinding = binding
+        val view = binding.root
 
-        recyclerView = view.findViewById(R.id.RecyclerView)
+        toolbar = binding.myToolbar
+        drawerLayoutManager = binding.drawerlayout
+
+        recyclerView = binding.RecyclerView
 
         Handler().postDelayed({
             getTrendingMoviesList()
@@ -62,7 +67,7 @@ class MovieTrendingFragment : Fragment() {
             toolBarMenu()
             setupNavigationDrawer()
 
-            navigationView = view.findViewById(R.id.navigationView)
+            navigationView = binding.navigationView
 
             navigationView.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener {
 
@@ -102,6 +107,11 @@ class MovieTrendingFragment : Fragment() {
         }, 1500)
 
         return view
+    }
+
+    override fun onDestroyView() {
+        fragmentMovietrendingBinding = null
+        super.onDestroyView()
     }
 
     private fun setUserLoginStatus() {

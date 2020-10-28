@@ -30,6 +30,11 @@
                 android:title="Profile"/>
 
             <item
+                android:id="@+id/myBookings"
+                android:icon="@drawable/ic_baseline_library_books_24"
+                android:title="My Bookings"/>
+
+            <item
                 android:id="@+id/logout"
                 android:icon="@drawable/ic_baseline_input_24"
                 android:title="Logout" />

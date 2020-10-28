@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.example.Movies.R
+import com.example.Movies.databinding.FragmentUserprofileBinding
 import com.example.Movies.login_register.views.LoginFragment
 import com.example.Movies.login_register.views.LoginRegisterActivity
 import com.example.Movies.userDataBase.UserDataBase
@@ -29,17 +30,20 @@ class UserProfileFragment : Fragment() {
     private lateinit var profile_email: TextView
     private lateinit var profile_number: TextView
     private lateinit var sessionId: String
+    private var fragmentUserprofileBinding: FragmentUserprofileBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_userprofile, container, false)
+        val binding = FragmentUserprofileBinding.inflate(inflater, container, false)
+        fragmentUserprofileBinding = binding
+        val view = binding.root
 
-        profile_name = view.findViewById(R.id.profileName)
-        profile_email = view.findViewById(R.id.profileEmail)
-        profile_number = view.findViewById(R.id.profileNumber)
+        profile_name = binding.profileName
+        profile_email = binding.profileEmail
+        profile_number = binding.profileNumber
 
         getCurrentUserSessionId()
 
@@ -47,20 +51,20 @@ class UserProfileFragment : Fragment() {
 
         fetchDetailsOfCurrentUser()
 
-        view.myBookings.setOnClickListener {
+        binding.myBookings.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.userBookingsFragment)
         }
 
-        view.btn_logout.setOnClickListener {
+        binding.btnLogout.setOnClickListener {
             Toast.makeText(context, "Logout Successful", Toast.LENGTH_SHORT).show()
             setUserLoginStatus()
             val intent = Intent(context, LoginRegisterActivity::class.java)
             startActivity(intent)
         }
 
-        view.my_toolbar.setTitle("Profile")
-        view.my_toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-        view.my_toolbar.setNavigationOnClickListener {
+        binding.myToolbar.setTitle("Profile")
+        binding.myToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+        binding.myToolbar.setNavigationOnClickListener {
             Navigation.findNavController(view).navigateUp()
         }
 

@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
+import com.example.Movies.databinding.FragmentUserbookingsBinding
 import com.example.Movies.mainpackage.api.adapter.MyAdapter3
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.gson.Gson
@@ -29,6 +30,8 @@ class UserBookingsFragment : Fragment() {
 
     private lateinit var sessionId: String
 
+    private var fragmentUserbookingsBinding: FragmentUserbookingsBinding? = null
+
     private var positionOfCurrentLoggedIn: Int = 0
 
     private lateinit var  userBookedMovieInfo: ArrayList<UserDataBase>
@@ -40,9 +43,11 @@ class UserBookingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_userbookings, container, false)
+        val binding = FragmentUserbookingsBinding.inflate(inflater, container, false)
+        fragmentUserbookingsBinding = binding
+        val view = binding.root
 
-        recyclerView = view.findViewById(R.id.recyclerView3)
+        recyclerView = binding.recyclerView3
 
 
         getCurrentUserSessionId()
@@ -56,9 +61,9 @@ class UserBookingsFragment : Fragment() {
             }
         }
 
-        view.my_toolbar.setTitle("Bookings")
-        view.my_toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-        view.my_toolbar.setNavigationOnClickListener {
+        binding.myToolbar.setTitle("Bookings")
+        binding.myToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+        binding.myToolbar.setNavigationOnClickListener {
             Navigation.findNavController(view).navigateUp()
         }
 

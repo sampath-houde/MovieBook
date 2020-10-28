@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.example.Movies.R
+import com.example.Movies.databinding.FragmentRegisterBinding
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_register.view.*
 
 class RegisterFragment : Fragment() {
 
+    private var fragmentRegisterBinding: FragmentRegisterBinding? = null
     private lateinit var btn_register: Button
     private lateinit var user_name: EditText
     private lateinit var user_email: EditText
@@ -32,15 +34,17 @@ class RegisterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_register, container, false)
+        val binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        fragmentRegisterBinding = binding
+        val view = binding.root
 
-        btn_register = view.findViewById(R.id.btn_register)
-        user_name= view.findViewById(R.id.nameEditText)
-        user_email = view.findViewById(R.id.emailEditText)
-        user_phone = view.findViewById(R.id.phoneEditText)
-        user_password = view.findViewById(R.id.passwordEditText)
+        btn_register = binding.btnRegister
+        user_name= binding.nameEditText
+        user_email = binding.emailEditText
+        user_phone = binding.phoneEditText
+        user_password = binding.passwordEditText
 
-        view.btn_register.setOnClickListener {
+        btn_register.setOnClickListener {
             val check = checkErrors()
             if(check == 4)
             {
@@ -48,15 +52,20 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        view.btn_login.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_loginFragment)
         }
 
-        view.btn_back.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             Navigation.findNavController(view).navigateUp()
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        fragmentRegisterBinding = null
+        super.onDestroyView()
     }
 
     private fun checkErrors() : Int {

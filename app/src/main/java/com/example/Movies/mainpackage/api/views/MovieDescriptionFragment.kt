@@ -18,6 +18,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.navigateUp
 import com.bumptech.glide.Glide
 import com.example.Movies.R
+import com.example.Movies.databinding.FragmentMoviedescriptionBinding
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -48,36 +49,37 @@ class MovieDescriptionFragment : Fragment() {
     private var positionOfLoggedInUser = 0 //PositionOfLoggedInUserInList
 
     private lateinit var user_data: ArrayList<UserDataBase>
+    private var fragmentMoviedescriptionBinding: FragmentMoviedescriptionBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_moviedescription, container, false)
+        val binding = FragmentMoviedescriptionBinding.inflate(inflater, container, false)
+        fragmentMoviedescriptionBinding = binding
+        val view = binding.root
 
-        val imageview: ImageView = view.findViewById(R.id.imageView3) as ImageView
-        val moviename: TextView = view.findViewById(R.id.movieName)
-        val movierating: TextView = view.findViewById(R.id.rating2)
-        val moviedescription: TextView = view.findViewById(R.id.movieDescription)
+        val imageview: ImageView = binding.imageView3
+        val moviename: TextView = binding.movieName
+        val movierating: TextView = binding.rating2
+        val moviedescription: TextView = binding.movieDescription
         val randomTicketGenerator = (1..30).random()
 
         Handler().postDelayed({
-            view.imageCardView.visibility = View.VISIBLE
-            view.movieNameCardView.visibility = View.VISIBLE
-            view.plotCardView.visibility = View.VISIBLE
-            view.progressCardView.visibility = View.INVISIBLE
-            view.bookingCard.visibility = View.VISIBLE
+            binding.imageCardView.visibility = View.VISIBLE
+            binding.movieNameCardView.visibility = View.VISIBLE
+            binding.plotCardView.visibility = View.VISIBLE
+            binding.progressCardView.visibility = View.INVISIBLE
+            binding.bookingCard.visibility = View.VISIBLE
             // Set Data
-            rating5.setText("N/A")
-            rating3.setText(data7)
-            moviename.setText(data1)
-            movierating.setText("N/A")
-            releaseDate2.setText(data5)
-            moviedescription.setText(data2)
+            binding.rating3.setText(data7)
+            binding.movieName.setText(data1)
+            binding.releaseDate2.setText(data5)
+            binding.movieDescription.setText(data2)
 
             if(data4=="1") {
-                imageView3.setImageResource(R.drawable.ic_baseline_broken_image_24)
+                binding.imageView3.setImageResource(R.drawable.ic_baseline_broken_image_24)
             } else
             {
                 var s1 = ""
@@ -88,10 +90,10 @@ class MovieDescriptionFragment : Fragment() {
                     .into(imageview)
             }
 
-            view.btn_plus.setOnClickListener {
+            binding.btnPlus.setOnClickListener {
                 tickets++
                 if(tickets <= randomTicketGenerator) {
-                    ticketsCount.setText(tickets.toString())
+                    binding.ticketsCount.setText(tickets.toString())
                 }
                 else {
                     Snackbar.make(btn_plus,"No Tickets Left", Snackbar.LENGTH_SHORT).show()
@@ -99,10 +101,10 @@ class MovieDescriptionFragment : Fragment() {
                 }
             }
 
-            view.btn_minus.setOnClickListener {
+            binding.btnMinus.setOnClickListener {
                 tickets--
                 if(tickets <= randomTicketGenerator) {
-                    ticketsCount.setText(tickets.toString())
+                    binding.ticketsCount.setText(tickets.toString())
                 }
                 else
                 {
@@ -111,7 +113,7 @@ class MovieDescriptionFragment : Fragment() {
                 }
             }
 
-            view.btn_bookNow.setOnClickListener {
+            binding.btnBookNow.setOnClickListener {
                 if(tickets != 0)
                 {
                     Snackbar.make(btn_bookNow, "Tickets Booked", Snackbar.LENGTH_SHORT).show()
@@ -120,33 +122,28 @@ class MovieDescriptionFragment : Fragment() {
                     getPositionOfLoggedInUser()
                     setBookedTikcetsInfoInLoggedInUser()
                     val action = MovieDescriptionFragmentDirections.actionMovieDescriptionFragmentToUserBookingsFragment()
-                    view?.findNavController()!!.navigate(action)
+                    view.findNavController().navigate(action)
 
                 }
                 else {
                     Toast.makeText(context, "No Tickets Booked", Toast.LENGTH_SHORT)
                         .show()
-                    /*val intentBooking = Intent(this, CheckoutFragment::class.java)
-                    intentBooking.putExtra("movieName", data1)
-                    intentBooking.putExtra("moviePoster", data4)
-                    intentBooking.putExtra("TicketCount", tickets)
-                    startActivity(intentBooking)*/
                 }
             }
 
-            view.my_toolbar.setTitle("Movie Description")
-            view.my_toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            view.my_toolbar.setNavigationOnClickListener {
+            binding.myToolbar.setTitle("Movie Description")
+            binding.myToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+            binding.myToolbar.setNavigationOnClickListener {
                 Navigation.findNavController(view).navigateUp()
             }
 
 
         }, 500)
 
-        view.plotCardView.visibility = View.INVISIBLE
-        view.bookingCard.visibility = View.INVISIBLE
-        view.movieNameCardView.visibility = View.INVISIBLE
-        view.imageCardView.visibility = View.INVISIBLE
+        binding.plotCardView.visibility = View.INVISIBLE
+        binding.bookingCard.visibility = View.INVISIBLE
+        binding.movieNameCardView.visibility = View.INVISIBLE
+        binding.imageCardView.visibility = View.INVISIBLE
 
         // Get Data
         data5 = args.movieDate!!
@@ -156,6 +153,16 @@ class MovieDescriptionFragment : Fragment() {
         data4 = args.moviePoster!!
 
         return view
+    }
+
+    override fun onPause() {
+        super.onPause()
+        tickets = 0
+    }
+
+    override fun onDestroyView() {
+        fragmentMoviedescriptionBinding = null
+        super.onDestroyView()
     }
 
     private fun getCurrentUserSessionIdFromIntent() {

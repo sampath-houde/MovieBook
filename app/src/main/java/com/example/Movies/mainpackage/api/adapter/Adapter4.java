@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.Movies.R;
+import com.example.Movies.databinding.MyViewBinding;
 import com.example.Movies.userDataBase.UserDataBase;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,6 +29,7 @@ public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
 
     Context context;
     ArrayList<UserDataBase.Movie_Favourites> movieFavourites;
+    MyViewBinding binding;
 
     public Adapter4(Context c, ArrayList<UserDataBase.Movie_Favourites> movieFavouritesList) {
         this.context = c;
@@ -38,8 +40,8 @@ public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.my_view, parent, false);
-        return new Adapter4.ViewHolder(view);
+        binding = MyViewBinding.inflate(inflater, parent, false);
+        return new Adapter4.ViewHolder(binding);
     }
 
     @Override
@@ -112,15 +114,13 @@ public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
         TextView moviename, movieType;
         ImageView img;
         ImageButton wishlist;
-        ConstraintLayout constraintLayout;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            moviename = itemView.findViewById(R.id.movieName);
-            img = itemView.findViewById(R.id.imageView1);
-            movieType = itemView.findViewById(R.id.adult);
-            wishlist = itemView.findViewById(R.id.btn_favicon);
-            //constraintLayout = itemView.findViewById(R.id.contraintLayout2);
+        public ViewHolder(MyViewBinding binding) {
+            super(binding.getRoot());
+            moviename = binding.movieName;
+            img = binding.imageView1;
+            movieType = binding.adult;
+            wishlist = binding.btnFavicon;
 
             wishlist.setImageResource(R.drawable.ic_baseline_favorite_24_red);
         }

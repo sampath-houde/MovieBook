@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
+import com.example.Movies.databinding.FragmentFavouritesBinding
 import com.example.Movies.mainpackage.api.adapter.Adapter4
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.gson.Gson
@@ -31,6 +32,8 @@ class FavouritesFragment : Fragment(){
 
     private lateinit var  user_data: ArrayList<UserDataBase>
 
+    private var fragmentFavouritesBinding: FragmentFavouritesBinding? = null
+
     private lateinit var  newUserFavourites: ArrayList<UserDataBase.Movie_Favourites>
 
     override fun onCreateView(
@@ -38,9 +41,11 @@ class FavouritesFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_favourites, container, false)
+        val binding = FragmentFavouritesBinding.inflate(inflater, container, false)
+        fragmentFavouritesBinding = binding
+        val view = binding.root
 
-        recyclerView = view.findViewById(R.id.RecyclerView4)
+        recyclerView = binding.RecyclerView4
         getCurrentUserSessionId()
 
         user_data = getMovieFavourites()
@@ -53,15 +58,20 @@ class FavouritesFragment : Fragment(){
             }
         }
 
-        view.my_toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-        view.my_toolbar.setNavigationOnClickListener {
+        binding.myToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+        binding.myToolbar.setNavigationOnClickListener {
             Navigation.findNavController(view).navigateUp()
         }
-        view.my_toolbar.setTitle("Favourites")
+        binding.myToolbar.setTitle("Favourites")
 
         newUserFavourites = user_data.get(positionOfCurrentLoggedIn).movie_favourites
         setDataToRecycler(newUserFavourites)
         return view
+    }
+
+    override fun onDestroyView() {
+        fragmentFavouritesBinding = null
+        super.onDestroyView()
     }
 
     private fun setDataToRecycler(newUserFavourites: ArrayList<UserDataBase.Movie_Favourites>) {

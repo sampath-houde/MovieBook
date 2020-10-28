@@ -12,16 +12,13 @@
         android:label="MovieListFragment">
         <action
             android:id="@+id/action_movieListFragment_to_movieSearchFragment"
-            app:destination="@id/movieSearchFragment"
-            app:enterAnim="@android:anim/fade_in" />
+            app:destination="@id/movieSearchFragment" />
         <action
             android:id="@+id/action_movieListFragment_to_movieDescriptionFragment"
-            app:destination="@id/movieDescriptionFragment"
-            app:enterAnim="@anim/slide_in_left" />
+            app:destination="@id/movieDescriptionFragment" />
         <action
             android:id="@+id/action_movieListFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment"
-            app:enterAnim="@anim/nav_default_pop_enter_anim" />
+            app:destination="@id/userProfileFragment" />
         <action
             android:id="@+id/action_movieListFragment_to_favouritesFragment"
             app:destination="@id/favouritesFragment" />

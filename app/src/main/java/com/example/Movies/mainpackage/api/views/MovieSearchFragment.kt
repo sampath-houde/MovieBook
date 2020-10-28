@@ -18,6 +18,8 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
+import com.example.Movies.databinding.FragmentMoviedescriptionBinding
+import com.example.Movies.databinding.FragmentMoviesearchBinding
 import com.example.Movies.mainpackage.api.adapter.MyAdapter2
 import com.example.Movies.mainpackage.api.ApiInterface.OMDBapi
 import com.example.Movies.mainpackage.api.ApiInterface.RetrofitInstance
@@ -41,6 +43,8 @@ class MovieSearchFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
 
+    private var fragmentMoviesearchBinding: FragmentMoviesearchBinding? = null
+
     private lateinit var myAdapter: MyAdapter2
 
     /*private var textQuery: TextView = findViewById(R.id.getSearchQuery)
@@ -51,39 +55,46 @@ class MovieSearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_moviesearch, container, false)
+        val binding = FragmentMoviesearchBinding.inflate(inflater, container, false)
+        fragmentMoviesearchBinding = binding
+        val view = binding.root
 
-        progressTextView = view.findViewById(R.id.connecting)
-        proressLayout = view.findViewById(R.id.progressConstraint)
-        progressBar = view.findViewById(R.id.progressBar)
-        progrressCardView = view.findViewById(R.id.progressCardView)
-        recyclerView = view.findViewById(R.id.recyclerView2)
+        progressTextView = binding.connecting
+        proressLayout = binding.progressConstraint
+        progressBar = binding.progressBar
+        progrressCardView = binding.progressCardView
+        recyclerView = binding.recyclerView2
 
-        view.search_button.setOnClickListener {
+        binding.searchButton.setOnClickListener {
 
-            if(searchEditText.text.toString().trim().isEmpty()){
+            if(binding.searchEditText.text.toString().trim().isEmpty()){
                 Toast.makeText(context, "Enter Movie Name", Toast.LENGTH_SHORT).show()
             }
             else {
                 progrressCardView.visibility = View.VISIBLE
                 Handler().postDelayed({
 
-                    val searchQuery = view.searchEditText.text.toString()
+                    val searchQuery = binding.searchEditText.text.toString()
                     getSearchMoviesList(searchQuery)
-                    view.searchEditText.setText("")
+                    binding.searchEditText.setText("")
 
                 }, 2000)
             }
 
         }
 
-        view.my_toolbar.setTitle("Search Movie")
-        view.my_toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-        view.my_toolbar.setNavigationOnClickListener {
+        binding.myToolbar.setTitle("Search Movie")
+        binding.myToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+        binding.myToolbar.setNavigationOnClickListener {
             Navigation.findNavController(view).navigateUp()
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        fragmentMoviesearchBinding = null
+        super.onDestroyView()
     }
 
     private fun setDataToRecycler2(body: MovieSearchList) {

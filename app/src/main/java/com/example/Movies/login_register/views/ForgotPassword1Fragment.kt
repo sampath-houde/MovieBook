@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.example.Movies.R
+import com.example.Movies.databinding.FragmentForgotpassword1Binding
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -21,6 +22,7 @@ import java.lang.reflect.Type
 
 class ForgotPassword1Fragment : Fragment() {
 
+    private var fragmentForgotpassword1Binding: FragmentForgotpassword1Binding? = null
     private lateinit var phoneText: TextView
     private lateinit var emailText: TextView
     private lateinit var userEmpty_list: ArrayList<UserDataBase>
@@ -30,13 +32,15 @@ class ForgotPassword1Fragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_forgotpassword1,container,false)
+        val binding = FragmentForgotpassword1Binding.inflate(inflater, container, false)
+        fragmentForgotpassword1Binding = binding
+        val view = binding.root
 
-        phoneText = view.findViewById(R.id.phoneEditText)
-        emailText = view.findViewById(R.id.emailEditText)
+        phoneText = binding.phoneEditText
+        emailText = binding.emailEditText
 
 
-        view.btn_next.setOnClickListener {
+        binding.btnNext.setOnClickListener {
             userEmpty_list = getUserList()
             val errors: Int = checkUserValidity()
             if (errors == 2) {
@@ -44,11 +48,16 @@ class ForgotPassword1Fragment : Fragment() {
             }
         }
 
-        view.btn_back.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             Navigation.findNavController(view).navigateUp()
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        fragmentForgotpassword1Binding = null
+        super.onDestroyView()
     }
 
     private fun checkSucessfull(useremptyList: ArrayList<UserDataBase>) {

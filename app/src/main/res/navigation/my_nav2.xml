@@ -9,7 +9,9 @@
         android:label="RegisterFragment">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment"/>
+            app:destination="@id/loginFragment"
+            app:exitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_left"/>
     </fragment>
     <fragment
         android:id="@+id/forgotPassword1Fragment"
@@ -17,10 +19,18 @@
         android:label="ForgotPassword1Fragment" >
         <action
             android:id="@+id/action_forgotPassword1Fragment_to_forgotPassword2Fragment"
-            app:destination="@id/forgotPassword2Fragment" />
+            app:destination="@id/forgotPassword2Fragment"
+            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"/>
         <action
             android:id="@+id/action_forgotPassword1Fragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/registerFragment"
+            app:exitAnim="@anim/slide_out_up"
+            app:enterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_up"/>
     </fragment>
     <fragment
         android:id="@+id/forgotPassword2Fragment"
@@ -28,7 +38,7 @@
         android:label="ForgotPassword2Fragment" >
         <action
             android:id="@+id/action_forgotPassword2Fragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"/>
         <argument
             android:name="key"
             app:argType="integer"

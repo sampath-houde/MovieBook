@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.Movies.R
+import com.example.Movies.databinding.FragmentForgotpassword2Binding
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -25,7 +26,7 @@ class ForgotPassword2Fragment : Fragment() {
 
     val args : ForgotPassword2FragmentArgs by navArgs()
     private lateinit var userEmpty_list: ArrayList<UserDataBase>
-
+    private var fragmentForgotpassword2Binding: FragmentForgotpassword2Binding? = null
     private lateinit var password1: TextView
     private lateinit var password2: TextView
     private  var i: Int = 0
@@ -35,15 +36,16 @@ class ForgotPassword2Fragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_forgotpassword2, container, false)
+        val binding = FragmentForgotpassword2Binding.inflate(inflater, container, false)
+        fragmentForgotpassword2Binding = binding
+        val view = binding.root
 
-        password1 = view.findViewById(R.id.passwordEditText)
-        password2 = view.findViewById(R.id.passwordEditText2)
+        password1 = binding.passwordEditText
+        password2 = binding.passwordEditText2
 
         i = args.key
 
-
-        view.btn_create.setOnClickListener {
+        binding.btnCreate.setOnClickListener {
             getUserList()
             val boolean = checkConditions()
             if(boolean) {
@@ -51,11 +53,16 @@ class ForgotPassword2Fragment : Fragment() {
             }
         }
 
-        view.btn_back.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             Navigation.findNavController(view).navigateUp()
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        fragmentForgotpassword2Binding = null
+        super.onDestroyView()
     }
 
     /*override fun onCreate(savedInstanceState: Bundle?) {

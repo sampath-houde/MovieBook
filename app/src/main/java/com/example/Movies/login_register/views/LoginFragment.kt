@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.example.Movies.R
+import com.example.Movies.databinding.FragmentLoginBinding
 import com.example.Movies.mainpackage.api.MainActivity
 import com.example.Movies.userDataBase.UserDataBase
 import com.example.Movies.mainpackage.api.views.MovieTrendingFragment
@@ -29,8 +30,9 @@ class LoginFragment : Fragment() {
 
     private lateinit var emailText:EditText
     private lateinit var passwordText: EditText
-
     private lateinit var userEmpty_list: ArrayList<UserDataBase>
+
+    private var fragmentLoginBinding: FragmentLoginBinding? = null
 
     private  var loginStatus: Boolean = false
 
@@ -39,25 +41,32 @@ class LoginFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_login, container, false)
+        val binding = FragmentLoginBinding.inflate(inflater, container, false)
+        fragmentLoginBinding = binding
+        val view = binding.root
 
-        passwordText = view.findViewById(R.id.passwordEditText)
-        emailText = view.findViewById(R.id.emailEditText)
+        passwordText = binding.passwordEditText
+        emailText = binding.emailEditText
 
-        view.btn_signup.setOnClickListener {
+        binding.btnSignup.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
-        view.btn_login.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
             val i = validateCheck()
             if(i==2){loginSuccessfull()}
         }
 
-        view.btn_forgot.setOnClickListener {
+        binding.btnForgot.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_forgotPassword1Fragment)
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        fragmentLoginBinding = null
+        super.onDestroyView()
     }
 
     private fun loginSuccessfull() {
