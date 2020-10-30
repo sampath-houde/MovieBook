@@ -1,8 +1,10 @@
 package com.example.Movies.mainpackage.api.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -61,13 +65,14 @@ public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
         holder.cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                holder.layout.setBackgroundColor(Color.parseColor("#FFFF4444"));
                 new MaterialAlertDialogBuilder(context)
                         .setTitle("Cancel Ticket")
                         .setMessage("Do you want to cancel the ticket")
                         .setPositiveButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
+                                holder.layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
                             }
                         })
                         .setNegativeButton("YES", new DialogInterface.OnClickListener() {
@@ -135,6 +140,7 @@ public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
         TextView moviename, movieTickets;
         ImageView img;
         Button cancel_btn;
+        ConstraintLayout layout;
 
         public ViewHolder(UserBookingsViewBinding binding) {
             super(binding.getRoot());
@@ -142,6 +148,7 @@ public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
             img = binding.movieImage;
             movieTickets = binding.ticketCount;
             cancel_btn = binding.btnCancel;
+            layout = binding.constraintLayout;
         }
     }
 }

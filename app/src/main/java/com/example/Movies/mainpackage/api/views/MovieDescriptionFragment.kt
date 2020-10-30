@@ -1,21 +1,17 @@
 package com.example.Movies.mainpackage.api.views
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.navigateUp
 import com.bumptech.glide.Glide
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentMoviedescriptionBinding
@@ -24,9 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_moviedescription.*
-import kotlinx.android.synthetic.main.fragment_moviedescription.view.*
 import java.lang.reflect.Type
-import kotlin.properties.Delegates
 
 @Suppress("DEPRECATION")
 class MovieDescriptionFragment : Fragment() {
@@ -34,6 +28,7 @@ class MovieDescriptionFragment : Fragment() {
     val args: MovieDescriptionFragmentArgs by navArgs()
     lateinit var data1: String //movieName
     lateinit var data2: String //moviePlot
+    lateinit var data6: String //movieRating
     lateinit var data4: String //moviePoster
     lateinit var data5: String //movieReleaseDate
     lateinit var data7: String //movieCount
@@ -60,10 +55,6 @@ class MovieDescriptionFragment : Fragment() {
         fragmentMoviedescriptionBinding = binding
         val view = binding.root
 
-        val imageview: ImageView = binding.imageView3
-        val moviename: TextView = binding.movieName
-        val movierating: TextView = binding.rating2
-        val moviedescription: TextView = binding.movieDescription
         val randomTicketGenerator = (1..30).random()
 
         Handler().postDelayed({
@@ -72,60 +63,73 @@ class MovieDescriptionFragment : Fragment() {
             binding.plotCardView.visibility = View.VISIBLE
             binding.progressCardView.visibility = View.INVISIBLE
             binding.bookingCard.visibility = View.VISIBLE
+            binding.materialRatingBar.visibility = View.VISIBLE
             // Set Data
             binding.rating3.setText(data7)
             binding.movieName.setText(data1)
             binding.releaseDate2.setText(data5)
             binding.movieDescription.setText(data2)
+            binding.rating2.setText(data6)
 
-            if(data4=="1") {
+            val rating = Math.round(data6.toDouble()).toInt()
+
+            when (rating) {
+                1 -> binding.materialRatingBar.setRating(0.5.toFloat())
+                2 -> binding.materialRatingBar.setRating(1.0.toFloat())
+                3 -> binding.materialRatingBar.setRating(1.5.toFloat())
+                4 -> binding.materialRatingBar.setRating(2f)
+                5 -> binding.materialRatingBar.setRating(2.5.toFloat())
+                6 -> binding.materialRatingBar.setRating(3f)
+                7 -> binding.materialRatingBar.setRating(3.5.toFloat())
+                8 -> binding.materialRatingBar.setRating(4f)
+                9 -> binding.materialRatingBar.setRating(4.5.toFloat())
+                10 -> binding.materialRatingBar.setRating(5f)
+                else -> binding.materialRatingBar.setRating(3f)
+            }
+
+            if (data4 == null) {
                 binding.imageView3.setImageResource(R.drawable.ic_baseline_broken_image_24)
-            } else
-            {
+            } else {
                 var s1 = ""
                 for (i in 1 until data4.length) {
                     s1 = s1 + data4[i]
                 }
                 Glide.with(this).load("https://image.tmdb.org/t/p/w500/" + s1)
-                    .into(imageview)
+                    .into(binding.imageView3)
             }
 
             binding.btnPlus.setOnClickListener {
                 tickets++
-                if(tickets <= randomTicketGenerator) {
+                if (tickets <= randomTicketGenerator) {
                     binding.ticketsCount.setText(tickets.toString())
-                }
-                else {
-                    Snackbar.make(btn_plus,"No Tickets Left", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    Snackbar.make(btn_plus, "No Tickets Left", Snackbar.LENGTH_SHORT).show()
                     tickets = randomTicketGenerator
                 }
             }
 
             binding.btnMinus.setOnClickListener {
                 tickets--
-                if(tickets <= randomTicketGenerator) {
+                if (tickets <= randomTicketGenerator) {
                     binding.ticketsCount.setText(tickets.toString())
-                }
-                else
-                {
-                    Snackbar.make(btn_plus,"Invaid Input", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    Snackbar.make(btn_plus, "Invaid Input", Snackbar.LENGTH_SHORT).show()
                     tickets = 0
                 }
             }
 
             binding.btnBookNow.setOnClickListener {
-                if(tickets != 0)
-                {
+                if (tickets != 0) {
                     Snackbar.make(btn_bookNow, "Tickets Booked", Snackbar.LENGTH_SHORT).show()
                     getCurrentUserSessionIdFromIntent()
                     getUserList()
                     getPositionOfLoggedInUser()
                     setBookedTikcetsInfoInLoggedInUser()
-                    val action = MovieDescriptionFragmentDirections.actionMovieDescriptionFragmentToUserBookingsFragment()
+                    val action =
+                        MovieDescriptionFragmentDirections.actionMovieDescriptionFragmentToUserBookingsFragment()
                     view.findNavController().navigate(action)
 
-                }
-                else {
+                } else {
                     Toast.makeText(context, "No Tickets Booked", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -144,6 +148,8 @@ class MovieDescriptionFragment : Fragment() {
         binding.bookingCard.visibility = View.INVISIBLE
         binding.movieNameCardView.visibility = View.INVISIBLE
         binding.imageCardView.visibility = View.INVISIBLE
+        binding.materialRatingBar.visibility = View.INVISIBLE
+        binding.progressCardView.visibility = View.VISIBLE
 
         // Get Data
         data5 = args.movieDate!!
@@ -151,6 +157,7 @@ class MovieDescriptionFragment : Fragment() {
         data1 = args.movieName!!
         data2 = args.movieDescription!!
         data4 = args.moviePoster!!
+        data6 = args.movieRating!!
 
         return view
     }
@@ -182,8 +189,10 @@ class MovieDescriptionFragment : Fragment() {
     }
 
     private fun updateUserList() {
-        val sharedPreferences: SharedPreferences = context?.getSharedPreferences("Main",
-            Context.MODE_PRIVATE)!!
+        val sharedPreferences: SharedPreferences = context?.getSharedPreferences(
+            "Main",
+            Context.MODE_PRIVATE
+        )!!
         val editor = sharedPreferences.edit()
         val gson: Gson = Gson()
         val json: String = gson.toJson(user_data)
@@ -202,7 +211,10 @@ class MovieDescriptionFragment : Fragment() {
     }
 
     fun getUserList() {
-        val sharedPreferences2: SharedPreferences = context?.getSharedPreferences("Main", Context.MODE_PRIVATE)!!
+        val sharedPreferences2: SharedPreferences = context?.getSharedPreferences(
+            "Main",
+            Context.MODE_PRIVATE
+        )!!
         val gson = Gson()
         val json = sharedPreferences2.getString("activity", null)
         val type: Type = object : TypeToken<ArrayList<UserDataBase>>() {}.type

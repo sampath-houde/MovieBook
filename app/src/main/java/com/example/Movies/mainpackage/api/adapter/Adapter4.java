@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -76,6 +77,22 @@ public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
                         }).show();
             }
         });
+
+        int rating = (int) Math.round(Double.parseDouble(movieFavourites.get(position).getMovie_Rating()));
+
+        switch (rating) {
+            case 1: holder.movierating.setRating((float) 0.5);break;
+            case 2: holder.movierating.setRating((float) 1.0);break;
+            case 3: holder.movierating.setRating((float) 1.5);break;
+            case 4: holder.movierating.setRating(2);break;
+            case 5: holder.movierating.setRating((float) 2.5);break;
+            case 6: holder.movierating.setRating(3);break;
+            case 7: holder.movierating.setRating((float) 3.5);break;
+            case 8: holder.movierating.setRating(4);break;
+            case 9: holder.movierating.setRating((float) 4.5);break;
+            case 10: holder.movierating.setRating(5);break;
+            default: holder.movierating.setRating(3);
+        }
     }
 
     @Override
@@ -128,6 +145,7 @@ public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
 
         TextView moviename, movieType;
         ImageView img;
+        RatingBar movierating;
         ImageButton wishlist;
 
         public ViewHolder(MyViewBinding binding) {
@@ -136,6 +154,7 @@ public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
             img = binding.imageView1;
             movieType = binding.adult;
             wishlist = binding.btnFavicon;
+            movierating = binding.movieRating;
 
             wishlist.setImageResource(R.drawable.ic_baseline_favorite_24_red);
         }

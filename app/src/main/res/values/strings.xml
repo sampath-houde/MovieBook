@@ -45,4 +45,12 @@
     <string name="favoutite_button">Favoutite button</string>
     <string name="favourites">Favourites</string>
     <string name="login">Login</string>
+    <string name="u_a">U/A</string>
+    <string name="book_now">Book Now</string>
+    <string name="_0">0</string>
+    <string name="tickets">Tickets:</string>
+    <string name="sampah_houde">Sampah Houde</string>
+    <string name="sampath_houde">Sampath Houde</string>
+    <string name="logout">Logout</string>
+    <string name="update">Update</string>
 </resources>

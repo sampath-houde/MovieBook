@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
     Context context;
     List<MovieSearchList.Result> movieList;
     MyViewBinding binding;
+    int rating;
 
     public MyAdapter2(Context c, List<MovieSearchList.Result> movieList)
     {
@@ -59,7 +61,22 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
 
         holder.btn_fav.setVisibility(View.INVISIBLE);
 
-        holder.movierating.setText(movieList.get(position).getVoteAverage().toString());
+        int rating = (int) Math.round(movieList.get(position).getVoteAverage());
+
+        switch (rating) {
+            case 1: holder.movierating.setRating((float) 0.5);break;
+            case 2: holder.movierating.setRating((float) 1.0);break;
+            case 3: holder.movierating.setRating((float) 1.5);break;
+            case 4: holder.movierating.setRating(2);break;
+            case 5: holder.movierating.setRating((float) 2.5);break;
+            case 6: holder.movierating.setRating(3);break;
+            case 7: holder.movierating.setRating((float) 3.5);break;
+            case 8: holder.movierating.setRating(4);break;
+            case 9: holder.movierating.setRating((float) 4.5);break;
+            case 10: holder.movierating.setRating(5);break;
+            default: holder.movierating.setRating(3);
+        }
+
         String str = movieList.get(position).getPosterPath();
         String s1="";
         if(str == null)
@@ -88,17 +105,19 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
                 {
                     bundle.putString("movieName", movieList.get(position).getOriginalTitle());
                 }
-                if(movieList.get(position).getPosterPath() != null)
-                {
+                /*if(movieList.get(position).getPosterPath() != null)
+                {*/
                     bundle.putString("moviePoster", movieList.get(position).getPosterPath());
-                }
+                /*}
                 else
                 {
                     bundle.putString("moviePoster", "1");
-                }
+                }*/
                 bundle.putString("movieDescription", movieList.get(position).getOverview());
                 bundle.putString("movieDate", movieList.get(position).getReleaseDate());
+                bundle.putString("movieRating", movieList.get(position).getVoteAverage().toString());
                 bundle.putString("movieVotes", movieList.get(position).getVoteCount().toString());
+                bundle.putString("movieShowType", "Movie");
                 MovieDescriptionFragment frag = new MovieDescriptionFragment();
                 Navigation.findNavController(v).navigate(R.id.action_movieSearchFragment_to_movieDescriptionFragment, bundle);
 
@@ -113,7 +132,8 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView moviename, movierating;
+        TextView moviename;
+        RatingBar movierating;
         ImageView img;
         ConstraintLayout mainLayout;
         ImageButton btn_fav;

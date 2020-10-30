@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.SharedPreferencesKt;
 import androidx.navigation.Navigation;
@@ -67,16 +69,30 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             holder.moviename.setText(movieList.get(position).getOriginalTitle());
         }
 
-        holder.movierating.setText(movieList.get(position).getVoteAverage().toString());
+        int rating = (int) Math.round(movieList.get(position).getVoteAverage());
+
+        switch (rating) {
+            case 1: holder.movierating.setRating((float) 0.5);break;
+            case 2: holder.movierating.setRating((float) 1.0);break;
+            case 3: holder.movierating.setRating((float) 1.5);break;
+            case 4: holder.movierating.setRating(2);break;
+            case 5: holder.movierating.setRating((float) 2.5);break;
+            case 6: holder.movierating.setRating(3);break;
+            case 7: holder.movierating.setRating((float) 3.5);break;
+            case 8: holder.movierating.setRating(4);break;
+            case 9: holder.movierating.setRating((float) 4.5);break;
+            case 10: holder.movierating.setRating(5);break;
+            default: holder.movierating.setRating(3);
+        }
 
         if (movieList.get(position).getAdult() != null) {
-            if (movieList.get(position).getAdult()) {
-                holder.movieAdult.setText("A Rated");
-            } else {
+            if (!movieList.get(position).getAdult()) {
                 holder.movieAdult.setText("U/A Rated");
+            } else {
+                holder.movieAdult.setText("A Rated");
             }
         } else {
-            holder.movieAdult.setText("N/A");
+            holder.movieAdult.setText("A Rated");
         }
         String str = movieList.get(position).getPosterPath();
         String s1 = "";
@@ -87,7 +103,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 load("https://image.tmdb.org/t/p/w500/" + s1)
                 .into(holder.img);
 
-        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -250,10 +266,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView moviename, movierating, movieAdult;
+        TextView moviename, movieAdult;
         ImageView img;
+        RatingBar movierating;
         ImageButton btn_fav;
         ConstraintLayout mainLayout;
+        CardView view;
 
         public ViewHolder(MyViewBinding binding) {
             super(binding.getRoot());
@@ -263,6 +281,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             movieAdult = binding.adult;
             btn_fav = binding.btnFavicon;
             mainLayout = binding.mainLayout;
+            view = binding.view;
 
         }
     }

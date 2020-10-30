@@ -23,6 +23,7 @@ class UserDataBase() : Serializable {
     }
 
     class Movie_Favourites : Serializable {
+        lateinit var movie_Rating: String
         var id: Int = -1
         var wishlist: Boolean = false
         lateinit var movie_name: String
@@ -30,7 +31,6 @@ class UserDataBase() : Serializable {
         lateinit var movie_showType: String
         lateinit var movie_Votes: String
         lateinit var movie_Poster: String
-        lateinit var movie_Rating: String
         lateinit var movie_Description: String
     }
     /* private var user_name: String=""

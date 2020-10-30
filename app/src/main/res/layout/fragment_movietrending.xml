@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -28,24 +27,11 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RecyclerView"
-            android:layout_marginTop="70dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
-            tools:listitem="@layout/my_view" />
-
         <androidx.cardview.widget.CardView
             android:id="@+id/progressCardView"
             android:layout_width="250dp"
             android:layout_height="150dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:cardBackgroundColor="@color/colorPrimary"
             app:cardCornerRadius="30dp"
             app:cardElevation="600dp"
@@ -69,8 +55,7 @@
                     android:indeterminateTintMode="src_atop"
                     app:layout_constraintBottom_toTopOf="@+id/connecting"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:targetApi="LOLLIPOP" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/connecting"
@@ -93,9 +78,9 @@
             android:id="@+id/connectionNotAvailable"
             android:layout_width="250dp"
             android:layout_height="250dp"
-            android:layout_marginTop="250dp"
             android:src="@drawable/ic_baseline_perm_scan_wifi_24"
             android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/my_toolbar" />
@@ -104,14 +89,23 @@
             android:id="@+id/textConnection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="160dp"
+            android:layout_marginTop="24dp"
             android:text="Internet Connection Error"
             android:textSize="30dp"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/progressCardView"
+            app:layout_constraintStart_toStartOf="@+id/progressCardView"
+            app:layout_constraintTop_toBottomOf="@+id/connectionNotAvailable" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RecyclerView"
+            android:layout_marginTop="70dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/connectionNotAvailable" />
+            app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
+            tools:listitem="@layout/my_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

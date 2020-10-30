@@ -6,4 +6,6 @@
     <color name="movie_backforund">#45413b</color>
     <color name="moviename">#ffffff</color>
     <color name="movieDescription">#c2bebe</color>
+    <color name="cancel">#F32D1B</color>
+    <color name="noCancel">#FFF</color>
 </resources>

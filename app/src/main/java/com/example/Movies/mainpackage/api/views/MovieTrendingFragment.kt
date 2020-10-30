@@ -15,7 +15,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.ui.navigateUp
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
@@ -26,11 +25,7 @@ import com.example.Movies.mainpackage.api.ApiInterface.RetrofitInstance
 import com.example.Movies.mainpackage.api.MainActivity
 import com.example.Movies.mainpackage.api.adapter.MyAdapter
 import com.example.Movies.mainpackage.api.model.MovieTrending
-import com.example.Movies.userDataBase.UserDataBase
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.fragment_movietrending.*
-import kotlinx.android.synthetic.main.fragment_movietrending.view.*
-import kotlinx.android.synthetic.main.my_view.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -100,11 +95,10 @@ class MovieTrendingFragment : Fragment() {
                 }
                 drawerLayoutManager.closeDrawer(GravityCompat.START)
                 return@OnNavigationItemSelectedListener true;
-
             })
-
-
         }, 1500)
+
+        binding.progressCardView.visibility = View.VISIBLE
 
         return view
     }
@@ -134,7 +128,7 @@ class MovieTrendingFragment : Fragment() {
                 call: Call<MovieTrending>?,
                 response: Response<MovieTrending>?,
             ) {
-                progressCardView.visibility = View.INVISIBLE
+                fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
                 if (response != null) {
                     results = response.body().results
                     setDataToRecycler(response.body())
@@ -142,13 +136,17 @@ class MovieTrendingFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<MovieTrending>?, t: Throwable?) {
-                progressCardView.visibility = View.INVISIBLE
-                connectionNotAvailable.visibility = View.VISIBLE
-                textConnection.visibility = View.VISIBLE
+                fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
+                fragmentMovietrendingBinding?.connectionNotAvailable?.visibility = View.VISIBLE
+                fragmentMovietrendingBinding?.textConnection?.visibility = View.VISIBLE
             }
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+
+    }
 
     private fun setDataToRecycler(body: MovieTrending) {
         myAdapter = MyAdapter(context, body.results)

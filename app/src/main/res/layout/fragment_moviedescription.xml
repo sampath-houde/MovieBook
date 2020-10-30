@@ -49,19 +49,33 @@
         </androidx.cardview.widget.CardView>
 
 
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+            android:id="@+id/materialRatingBar"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:numStars="5"
+            android:rating="3.5"
+            android:progressTint="#FF9800"
+            app:layout_constraintEnd_toEndOf="@+id/imageCardView"
+            app:layout_constraintStart_toStartOf="@+id/imageCardView"
+            app:layout_constraintTop_toBottomOf="@+id/imageCardView" />
+
+
         <androidx.cardview.widget.CardView
             android:id="@+id/movieNameCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
+            app:cardBackgroundColor="#161717"
             app:cardCornerRadius="10dp"
             app:cardElevation="15dp"
-            app:cardBackgroundColor="#161717"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageCardView"
+            app:layout_constraintTop_toBottomOf="@+id/materialRatingBar"
             tools:ignore="MissingConstraints">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -129,9 +143,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
-                    android:paddingBottom="10dp"
                     android:paddingTop="10dp"
                     android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
                     android:text="8.4"
                     android:textColor="#fff"
                     android:textSize="18dp"
@@ -161,8 +175,8 @@
                     android:id="@+id/releaseDate2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
                     android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:text="2020-09-23"
                     android:textColor="#fff"
                     android:textSize="18dp"
@@ -191,8 +205,8 @@
                     android:layout_marginEnd="36dp"
                     android:layout_marginBottom="24dp"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
                     android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
                     android:text="TV"
                     android:textColor="#fff"
                     android:textSize="18dp"
@@ -294,9 +308,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="92dp"
                     android:layout_marginEnd="5dp"
-                    android:text="Tickets: "
+                    android:text="@string/tickets"
                     android:textColor="#fff"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBaseline_toBaselineOf="@+id/ticketsCount"
                     app:layout_constraintEnd_toStartOf="@+id/tickets"
@@ -309,9 +323,9 @@
                     android:layout_marginStart="58dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="16dp"
-                    android:text="0"
+                    android:text="@string/_0"
                     android:textColor="#fff"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView4"
@@ -356,9 +370,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:padding="15dp"
-            android:text="Book Now"
+            android:text="@string/book_now"
             android:textColor="@android:color/white"
-            android:textSize="15dp"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -413,9 +427,6 @@
                     app:layout_constraintVertical_bias="0.763" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
