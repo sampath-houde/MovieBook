@@ -1,25 +1,21 @@
 package com.example.Movies.mainpackage.api.views
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentFavouritesBinding
 import com.example.Movies.mainpackage.api.adapter.Adapter4
+import com.example.Movies.mainpackage.api.viewModel.UserFavouritesViewModel
 import com.example.Movies.userDataBase.UserDataBase
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.fragment_favourites.view.*
-import java.lang.reflect.Type
 
+@Suppress("DEPRECATION")
 class FavouritesFragment : Fragment(){
 
     lateinit var recyclerView: RecyclerView
@@ -36,6 +32,8 @@ class FavouritesFragment : Fragment(){
 
     private lateinit var  newUserFavourites: ArrayList<UserDataBase.Movie_Favourites>
 
+    private lateinit var userFavouritesViewModel: UserFavouritesViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,20 +41,11 @@ class FavouritesFragment : Fragment(){
     ): View? {
         val binding = FragmentFavouritesBinding.inflate(inflater, container, false)
         fragmentFavouritesBinding = binding
-        val view = binding.root
+        val view= binding.root
+        userFavouritesViewModel = ViewModelProviders.of(this).get(UserFavouritesViewModel::class.java)
 
         recyclerView = binding.RecyclerView4
-        getCurrentUserSessionId()
 
-        user_data = getMovieFavourites()
-
-        for(i in 0 until user_data.size)
-        {
-            if(sessionId == user_data.get(i).user_email)
-            {
-                positionOfCurrentLoggedIn = i
-            }
-        }
 
         binding.myToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         binding.myToolbar.setNavigationOnClickListener {
@@ -64,17 +53,13 @@ class FavouritesFragment : Fragment(){
         }
         binding.myToolbar.setTitle("Favourites")
 
-        newUserFavourites = user_data.get(positionOfCurrentLoggedIn).movie_favourites
-        setDataToRecycler(newUserFavourites)
+        userFavouritesViewModel.getPositionOfCurrentLoggedInUser()
+        userFavouritesViewModel.setDataToRecycler3Adapter(this)
+
         return view
     }
 
-    override fun onDestroyView() {
-        fragmentFavouritesBinding = null
-        super.onDestroyView()
-    }
-
-    private fun setDataToRecycler(newUserFavourites: ArrayList<UserDataBase.Movie_Favourites>) {
+    fun setDataToRecycler(newUserFavourites: ArrayList<UserDataBase.Movie_Favourites>) {
         myAdapter = Adapter4(context, newUserFavourites)
         myAdapter.notifyDataSetChanged()
 
@@ -82,7 +67,13 @@ class FavouritesFragment : Fragment(){
         recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-    private fun getMovieFavourites(): ArrayList<UserDataBase> {
+    override fun onDestroyView() {
+        fragmentFavouritesBinding = null
+        super.onDestroyView()
+    }
+}
+
+/*private fun getMovieFavourites(): ArrayList<UserDataBase> {
         val user_data: ArrayList<UserDataBase>
         val sharedPreferences2: SharedPreferences = context?.getSharedPreferences("Main",
             Context.MODE_PRIVATE
@@ -97,10 +88,9 @@ class FavouritesFragment : Fragment(){
             user_data = gson.fromJson(json, type)
         }
         return user_data
-    }
+    }*/
 
-    private fun getCurrentUserSessionId() {
-        val sharedPreferences2 = context?.getSharedPreferences("LoginSession", Context.MODE_PRIVATE)!!
-        sessionId = sharedPreferences2.getString("userSessionId", null).toString()
-    }
-}
+/*private fun getCurrentUserSessionId() {
+    val sharedPreferences2 = context?.getSharedPreferences("LoginSession", Context.MODE_PRIVATE)!!
+    sessionId = sharedPreferences2.getString("userSessionId", null).toString()
+}*/

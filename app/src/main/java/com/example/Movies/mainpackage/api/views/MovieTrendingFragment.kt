@@ -1,8 +1,6 @@
 package com.example.Movies.mainpackage.api.views
 
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -14,32 +12,29 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentMovietrendingBinding
 import com.example.Movies.login_register.views.LoginRegisterActivity
-import com.example.Movies.mainpackage.api.ApiInterface.OMDBapi
-import com.example.Movies.mainpackage.api.ApiInterface.RetrofitInstance
 import com.example.Movies.mainpackage.api.MainActivity
 import com.example.Movies.mainpackage.api.adapter.MyAdapter
 import com.example.Movies.mainpackage.api.model.MovieTrending
+import com.example.Movies.mainpackage.api.viewModel.MovieTrendingModel
 import com.google.android.material.navigation.NavigationView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @Suppress("DEPRECATION")
-class MovieTrendingFragment : Fragment() {
+open class MovieTrendingFragment : Fragment() {
 
     private lateinit var drawerLayoutManager: DrawerLayout
     private lateinit var navigationView: NavigationView
-    private var results = listOf<MovieTrending.Result>()
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: MyAdapter
     private lateinit var toolbar: Toolbar
     private var fragmentMovietrendingBinding: FragmentMovietrendingBinding? = null
+    lateinit var movietrendingViewModel: MovieTrendingModel
 
 
     override fun onCreateView(
@@ -50,19 +45,25 @@ class MovieTrendingFragment : Fragment() {
         val binding = FragmentMovietrendingBinding.inflate(inflater, container, false)
         fragmentMovietrendingBinding = binding
         val view = binding.root
-
+        movietrendingViewModel = ViewModelProviders.of(this).get(MovieTrendingModel::class.java)
         toolbar = binding.myToolbar
         drawerLayoutManager = binding.drawerlayout
-
         recyclerView = binding.RecyclerView
 
-        Handler().postDelayed({
-            getTrendingMoviesList()
 
+        callNaviagtionDrawer(view)
+
+        binding.progressCardView.visibility = View.VISIBLE
+
+        return view
+    }
+
+    fun callNaviagtionDrawer(view: DrawerLayout) {
+        Handler().postDelayed({
+            movietrendingViewModel.getTrendingMoviesList(this)
             toolBarMenu()
             setupNavigationDrawer()
-
-            navigationView = binding.navigationView
+            navigationView = fragmentMovietrendingBinding?.navigationView!!
 
             navigationView.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener {
 
@@ -74,7 +75,7 @@ class MovieTrendingFragment : Fragment() {
 
                     R.id.logout -> {
                         Toast.makeText(this.context, "Logout Successful", Toast.LENGTH_SHORT).show()
-                        setUserLoginStatus()
+                        movietrendingViewModel.setUserLoginStatus()
                         val intent = Intent(context, LoginRegisterActivity::class.java)
                         startActivity(intent)
                         activity?.finish()
@@ -97,69 +98,30 @@ class MovieTrendingFragment : Fragment() {
                 return@OnNavigationItemSelectedListener true;
             })
         }, 1500)
-
-        binding.progressCardView.visibility = View.VISIBLE
-
-        return view
-    }
-
-    override fun onDestroyView() {
-        fragmentMovietrendingBinding = null
-        super.onDestroyView()
-    }
-
-    private fun setUserLoginStatus() {
-        val loginStatus = context?.getSharedPreferences("LoginSession", MODE_PRIVATE)!!
-        val editor: SharedPreferences.Editor = loginStatus.edit()
-        editor.putBoolean("userLoginStatus", false)
-        editor.apply()
     }
 
 
-    private fun getTrendingMoviesList() {
 
-        val getOMDBapi: OMDBapi = RetrofitInstance.getService()
-        val call: Call<MovieTrending> = getOMDBapi.trendingMovieList
+    fun setListFromApiToRecyclerAdapter(body: MovieTrending) {
+        val linearLayoutManager = LinearLayoutManager(context)
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
 
-
-        call.enqueue(object : Callback<MovieTrending> {
-
-            override fun onResponse(
-                call: Call<MovieTrending>?,
-                response: Response<MovieTrending>?,
-            ) {
-                fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
-                if (response != null) {
-                    results = response.body().results
-                    setDataToRecycler(response.body())
-                }
-            }
-
-            override fun onFailure(call: Call<MovieTrending>?, t: Throwable?) {
-                fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
-                fragmentMovietrendingBinding?.connectionNotAvailable?.visibility = View.VISIBLE
-                fragmentMovietrendingBinding?.textConnection?.visibility = View.VISIBLE
-            }
-        })
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-    }
-
-    private fun setDataToRecycler(body: MovieTrending) {
         myAdapter = MyAdapter(context, body.results)
-        myAdapter.notifyDataSetChanged()
+        //myAdapter.notifyDataSetChanged()
 
-        recyclerView.adapter = myAdapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        fragmentMovietrendingBinding?.RecyclerView?.adapter = myAdapter
+        fragmentMovietrendingBinding?.RecyclerView?.layoutManager = linearLayoutManager
 
+        fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
+    }
+
+    fun onFailureApiCall(){
+        fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
+        fragmentMovietrendingBinding?.connectionNotAvailable?.visibility = View.VISIBLE
+        fragmentMovietrendingBinding?.textConnection?.visibility = View.VISIBLE
     }
 
     fun setupNavigationDrawer() {
-
-
         val toggle = ActionBarDrawerToggle(
             activity,
             drawerLayoutManager,
@@ -177,8 +139,14 @@ class MovieTrendingFragment : Fragment() {
         (activity as MainActivity?)!!.setSupportActionBar(toolbar)
     }
 
+    override fun onDestroyView() {
+        fragmentMovietrendingBinding = null
+        super.onDestroyView()
+    }
 
-    /*private fun onFilter(text: String) {
+}
+
+/*private fun onFilter(text: String) {
         var results2 = ArrayList<MovieTrending.Result>()
 
         if (text != null) {
@@ -201,9 +169,6 @@ class MovieTrendingFragment : Fragment() {
             myAdapter.notifyDataSetChanged()
         }
     }*/
-
-}
-
 
 /*@SuppressLint("ResourceType")
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -251,15 +216,55 @@ override fun onCreate(savedInstanceState: Bundle?) {
     Handler().postDelayed({
         getTrendingMoviesList()
 
-        *//*fab.setOnClickListener {
+        fab.setOnClickListener {
 
-            }*//*
+            }
 
         }, 1500)
 
         textView3.visibility = View.INVISIBLE
     }*/
 
+/*private fun getTrendingMoviesList() {
+
+       val getOMDBapi: OMDBapi = RetrofitInstance.getService()
+       val call: Call<MovieTrending> = getOMDBapi.trendingMovieList
+
+
+       call.enqueue(object : Callback<MovieTrending> {
+
+           override fun onResponse(
+               call: Call<MovieTrending>?,
+               response: Response<MovieTrending>?,
+           ) {
+               fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
+               if (response != null) {
+                   results = response.body().results
+                   movietrendingViewModel.setDataToRecycler(response.body())
+                   recyclerView.adapter = myAdapter
+                   recyclerView.layoutManager = LinearLayoutManager(context)
+               }
+           }
+
+           override fun onFailure(call: Call<MovieTrending>?, t: Throwable?) {
+               fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
+               fragmentMovietrendingBinding?.connectionNotAvailable?.visibility = View.VISIBLE
+               fragmentMovietrendingBinding?.textConnection?.visibility = View.VISIBLE
+           }
+       })
+   }*/
+
+/*private fun setDataToRecycler(body: MovieTrending) {
+    myAdapter = MyAdapter(context, body.results)
+    myAdapter.notifyDataSetChanged()
+}*/
+
+/*private fun setUserLoginStatus() {
+       val loginStatus = context?.getSharedPreferences("LoginSession", MODE_PRIVATE)!!
+       val editor: SharedPreferences.Editor = loginStatus.edit()
+       editor.putBoolean("userLoginStatus", false)
+       editor.apply()
+   }*/
 
 
 

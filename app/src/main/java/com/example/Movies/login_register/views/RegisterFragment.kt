@@ -1,24 +1,28 @@
 package com.example.Movies.login_register.views
 
 import android.content.Context.MODE_PRIVATE
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentRegisterBinding
+import com.example.Movies.login_register.views.loginRegisterViewModels.RegisterViewModel
 import com.example.Movies.userDataBase.UserDataBase
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_register.*
-import kotlinx.android.synthetic.main.fragment_register.view.*
 
+@Suppress("DEPRECATION")
 class RegisterFragment : Fragment() {
 
     private var fragmentRegisterBinding: FragmentRegisterBinding? = null
@@ -27,6 +31,7 @@ class RegisterFragment : Fragment() {
     private lateinit var user_email: EditText
     private lateinit var user_phone: EditText
     private lateinit var user_password: EditText
+    private lateinit var registerViewModel: RegisterViewModel
     private var userEmpty_list = ArrayList<UserDataBase>()
 
     override fun onCreateView(
@@ -36,19 +41,21 @@ class RegisterFragment : Fragment() {
     ): View? {
         val binding = FragmentRegisterBinding.inflate(inflater, container, false)
         fragmentRegisterBinding = binding
-        val view = binding.root
-
-        btn_register = binding.btnRegister
         user_name= binding.nameEditText
         user_email = binding.emailEditText
         user_phone = binding.phoneEditText
         user_password = binding.passwordEditText
+        val view = binding.root
+        registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
 
-        btn_register.setOnClickListener {
-            val check = checkErrors()
-            if(check == 4)
-            {
-                setAndAddAllData()
+        binding.btnRegister.setOnClickListener {
+            if(checkErrors() == 4) {
+                val boolean = registerViewModel.setAndAddAllData(user_name.text.toString(), user_email.text.toString(),
+                                 user_phone.text.toString(), user_password.text.toString())
+                if(boolean) {
+                    view.findNavController().navigate(R.id.loginFragment)
+                    Toast.makeText(context, "Registered Successfully", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -102,18 +109,19 @@ class RegisterFragment : Fragment() {
         return i;
     }
 
-    //Function to add all data
-    public fun setAndAddAllData() {
+
+}
+
+/*//Function to add all data
+    fun setAndAddAllData() {
         val userData = UserDataBase()
-        userData.user_name = user_name.text.toString()
-        userData.user_phone = user_phone.text.toString()
-        userData.user_email = user_email.text.toString()
-        userData.user_password = user_password.text.toString()
+        userData.user_name = user_name.toString()
+        userData.user_phone = user_phone.toString()
+        userData.user_email = user_email.toString()
+        userData.user_password = user_password.toString()
 
         userEmpty_list.add(userData)
         setUserList()
-
-        view?.findNavController()!!.navigate(R.id.loginFragment)
     }
 
     fun setUserList(){
@@ -123,10 +131,7 @@ class RegisterFragment : Fragment() {
         val json: String = gson.toJson(userEmpty_list)
         editor.putString("activity", json)
         editor.apply()
-    }
-}
-
-
+    }*/
 /*override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.fragment_register)

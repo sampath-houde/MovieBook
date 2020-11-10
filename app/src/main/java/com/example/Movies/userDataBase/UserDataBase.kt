@@ -9,6 +9,7 @@ import kotlin.properties.Delegates
 
 class UserDataBase() : Serializable {
 
+     var userEmpty_list = ArrayList<UserDataBase>()
     lateinit var user_name: String
     lateinit var user_email: String
     lateinit var user_phone: String

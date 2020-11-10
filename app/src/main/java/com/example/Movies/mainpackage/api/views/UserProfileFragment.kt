@@ -4,30 +4,23 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import com.example.Movies.R
-import com.example.Movies.databinding.FragmentUserprofileBinding
 import com.example.Movies.databinding.UserProfileBinding
-import com.example.Movies.login_register.views.LoginFragment
 import com.example.Movies.login_register.views.LoginRegisterActivity
+import com.example.Movies.mainpackage.api.viewModel.UserProfileViewModel
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.fragment_userprofile.*
-import kotlinx.android.synthetic.main.fragment_userprofile.view.*
 import java.lang.reflect.Type
-import kotlin.coroutines.coroutineContext
 
 @Suppress("DEPRECATION")
 class UserProfileFragment : Fragment() {
@@ -41,6 +34,7 @@ class UserProfileFragment : Fragment() {
     private lateinit var phoneLayout: TextInputLayout
     private var currentLoggedUser: Int = 0
     private var userprofileBinding: UserProfileBinding? = null
+    private lateinit var userProfileViewModel: UserProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,10 +51,11 @@ class UserProfileFragment : Fragment() {
         nameLayout = binding.nameEditTextLayout
         emailLayout = binding.emailEditTextLayout
         phoneLayout = binding.phoneEditTextLayout
+        userProfileViewModel = ViewModelProviders.of(this).get(UserProfileViewModel::class.java)
 
-        getUserList()
+        user_data = userProfileViewModel.getUserList()
 
-        getCurrentUserSessionId()
+        currentLoggedUser = userProfileViewModel.getCurrentUserSessionId()
 
         fetchDetailsOfCurrentUser()
 
@@ -74,7 +69,7 @@ class UserProfileFragment : Fragment() {
 
         binding.btnLogout.setOnClickListener {
             Toast.makeText(context, "Logout Successful", Toast.LENGTH_SHORT).show()
-            setUserLoginStatus()
+            userProfileViewModel.setUserLoginStatus()
             val intent = Intent(context, LoginRegisterActivity::class.java)
             startActivity(intent)
             activity?.finish()
@@ -87,69 +82,76 @@ class UserProfileFragment : Fragment() {
         binding.btnUpdate.setOnClickListener {
             updateDataOfTheUser()
         }
-
-
-
         return view
     }
 
     private fun updateDataOfTheUser() {
         var flag = 0
-        if(profile_name.text.toString().isEmpty())
-        {
+        if (profile_name.text.toString().isEmpty()) {
             nameLayout.error = "*Enter Name"
         } else {
-            if(user_data.get(currentLoggedUser).user_name != profile_name.text.toString()) {
-                user_data.get(currentLoggedUser).user_name = profile_name.text.toString()
-                flag = 1
-            }
+            user_data.get(currentLoggedUser).user_name = profile_name.text.toString()
+            flag++
         }
 
-        if(profile_email.text.toString().isEmpty() || !profile_email.text.toString().contains("@") || !profile_email.text.toString().contains(".com"))
-        {
+        if (profile_email.text.toString().isEmpty() || !profile_email.text.toString()
+                .contains("@") || !profile_email.text.toString().contains(".com")
+        ) {
             emailLayout.error = "*Enter valid Email Id"
         } else {
-            if(user_data.get(currentLoggedUser).user_email != profile_email.text.toString()) {
-                user_data.get(currentLoggedUser).user_email = profile_email.text.toString()
-                flag = 1
-            }
+            user_data.get(currentLoggedUser).user_email = profile_email.text.toString()
+            flag++
         }
 
-        if(profile_email.text.toString().isEmpty() || profile_number.text.toString().length!=10)
-        {
+        if (profile_email.text.toString()
+                .isEmpty() || profile_number.text.toString().length != 10
+        ) {
             emailLayout.error = "*Enter valid Email Id"
         } else {
-            if(user_data.get(currentLoggedUser).user_phone == profile_number.text.toString()) {
-                user_data.get(currentLoggedUser).user_phone = profile_number.text.toString()
-                flag = 1
-            }
+            user_data.get(currentLoggedUser).user_phone = profile_number.text.toString()
+            flag++
         }
 
-        if(flag == 1)
-        {
+        if (flag == 3) {
             Toast.makeText(context, "Updated User Data", Toast.LENGTH_SHORT).show()
             Navigation.findNavController(userprofileBinding!!.root).navigate(R.id.movieListFragment)
-            updateUserList()
+            userProfileViewModel.updateUserList(user_data)
         }
     }
 
-    fun updateUserList(){
+
+    private fun fetchDetailsOfCurrentUser() {
+        profile_name.text = user_data.get(currentLoggedUser).user_name
+        profile_email.text = user_data.get(currentLoggedUser).user_email
+        profile_number.text = user_data.get(currentLoggedUser).user_phone
+        userprofileBinding?.headerName?.text = user_data.get(currentLoggedUser).user_name
+        userprofileBinding?.headerUserName?.text =
+            user_data.get(currentLoggedUser).user_name.toLowerCase().replace(" ", "_")
+        userprofileBinding?.wishlistNumber?.text =
+            user_data.get(currentLoggedUser).movie_favourites.size.toString()
+        userprofileBinding?.bookingNumber?.text =
+            user_data.get(currentLoggedUser).movie_booked.size.toString()
+    }
+
+}
+
+    /*fun updateUserList(){
         val sharedPreferences = context?.getSharedPreferences("Main", MODE_PRIVATE)!!
         val editor = sharedPreferences.edit()
         val gson: Gson = Gson()
         val json: String = gson.toJson(user_data)
         editor.putString("activity", json)
         editor.apply()
-    }
+    }*/
 
-    private fun setUserLoginStatus() {
+    /*private fun setUserLoginStatus() {
         val loginStatus = context?.getSharedPreferences("LoginSession", MODE_PRIVATE)!!
         val editor: SharedPreferences.Editor = loginStatus.edit()
         editor.putBoolean("userLoginStatus", false)
         editor.apply()
-    }
+    }*/
 
-    fun getUserList() {
+    /*fun getUserList() {
         val sharedPreferences2 = context?.getSharedPreferences("Main", MODE_PRIVATE)!!
         val gson = Gson()
         val json = sharedPreferences2.getString("activity", null)
@@ -160,19 +162,9 @@ class UserProfileFragment : Fragment() {
 
             user_data = gson.fromJson(json, type)
         }
-    }
+    }*/
 
-    private fun fetchDetailsOfCurrentUser() {
-                profile_name.text = user_data.get(currentLoggedUser).user_name
-                profile_email.text = user_data.get(currentLoggedUser).user_email
-                profile_number.text = user_data.get(currentLoggedUser).user_phone
-                userprofileBinding?.headerName?.text = user_data.get(currentLoggedUser).user_name
-                userprofileBinding?.headerUserName?.text = user_data.get(currentLoggedUser).user_name.toLowerCase().replace(" ", "_")
-                userprofileBinding?.wishlistNumber?.text = user_data.get(currentLoggedUser).movie_favourites.size.toString()
-                userprofileBinding?.bookingNumber?.text = user_data.get(currentLoggedUser).movie_booked.size.toString()
-    }
-
-    private fun getCurrentUserSessionId() {
+    /*private fun getCurrentUserSessionId() {
         val sessionId: String
         val sharedPreferences3 = activity?.getSharedPreferences("LoginSession", MODE_PRIVATE)!!
         sessionId = sharedPreferences3.getString("userSessionId", null).toString()
@@ -182,12 +174,9 @@ class UserProfileFragment : Fragment() {
                 break
             }
         }
-    }
+    }*/
 
-}
-
-
-/*override fun onCreate(savedInstanceState: Bundle?) {
+    /*override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.fragment_userprofile)
 

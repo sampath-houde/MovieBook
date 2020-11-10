@@ -1,8 +1,6 @@
 package com.example.Movies.login_register.views
 
 import android.content.Context.MODE_PRIVATE
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,26 +8,28 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentForgotpassword2Binding
+import com.example.Movies.login_register.views.loginRegisterViewModels.ForgotPassword2ViewModel
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_forgotpassword2.*
-import kotlinx.android.synthetic.main.fragment_forgotpassword2.view.*
 import java.lang.reflect.Type
 
+@Suppress("DEPRECATION")
 class ForgotPassword2Fragment : Fragment() {
 
     val args : ForgotPassword2FragmentArgs by navArgs()
     private lateinit var userEmpty_list: ArrayList<UserDataBase>
     private var fragmentForgotpassword2Binding: FragmentForgotpassword2Binding? = null
+    private lateinit var forgotpassword2ViewModel: ForgotPassword2ViewModel
     private lateinit var password1: TextView
     private lateinit var password2: TextView
-    private  var i: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,17 +39,19 @@ class ForgotPassword2Fragment : Fragment() {
         val binding = FragmentForgotpassword2Binding.inflate(inflater, container, false)
         fragmentForgotpassword2Binding = binding
         val view = binding.root
+        forgotpassword2ViewModel = ViewModelProviders.of(this).get(ForgotPassword2ViewModel::class.java)
 
         password1 = binding.passwordEditText
         password2 = binding.passwordEditText2
 
-        i = args.key
-
         binding.btnCreate.setOnClickListener {
-            getUserList()
             val boolean = checkConditions()
             if(boolean) {
-                updatePassword()
+                val boolean = forgotpassword2ViewModel.updatePassword(args.key, password2.text.toString())
+                if(boolean) {
+                    Toast.makeText(context, "Password Updated", Toast.LENGTH_SHORT).show()
+                    view.findNavController().navigate(R.id.loginFragment)
+                }
             }
         }
 
@@ -58,38 +60,6 @@ class ForgotPassword2Fragment : Fragment() {
         }
 
         return view
-    }
-
-    override fun onDestroyView() {
-        fragmentForgotpassword2Binding = null
-        super.onDestroyView()
-    }
-
-    /*override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_forgotpassword2)
-
-
-        password1 = findViewById(R.id.passwordEditText)
-        password2 = findViewById(R.id.passwordEditText2)
-
-        i = intent.getIntExtra("key", -1)
-
-
-        btn_create.setOnClickListener {
-            getUserList()
-            val boolean = checkConditions()
-            if(boolean) {
-                updatePassword()
-            }
-        }
-    }*/
-
-    private fun updatePassword() {
-        userEmpty_list.get(i).user_password = password2.text.toString()
-        updateUserList()
-        Toast.makeText(context, "Password Updated", Toast.LENGTH_SHORT).show()
-        view?.findNavController()!!.navigate(R.id.loginFragment)
     }
 
     private fun checkConditions() : Boolean {
@@ -112,10 +82,45 @@ class ForgotPassword2Fragment : Fragment() {
         if(o==3) {
             return password1.text.toString() == password2.text.toString()
         }
-        else return false
+        else
+            return false
     }
 
-    fun getUserList() {
+    override fun onDestroyView() {
+        fragmentForgotpassword2Binding = null
+        super.onDestroyView()
+    }
+
+}
+
+/*override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_forgotpassword2)
+
+
+        password1 = findViewById(R.id.passwordEditText)
+        password2 = findViewById(R.id.passwordEditText2)
+
+        i = intent.getIntExtra("key", -1)
+
+
+        btn_create.setOnClickListener {
+            getUserList()
+            val boolean = checkConditions()
+            if(boolean) {
+                updatePassword()
+            }
+        }
+    }*/
+
+/*private fun updatePassword(key: Int) {
+        userEmpty_list.get(key).user_password = password2.text.toString()
+        updateUserList()
+        Toast.makeText(context, "Password Updated", Toast.LENGTH_SHORT).show()
+        view?.findNavController()!!.navigate(R.id.loginFragment)
+    }*/
+
+/*fun getUserList() {
         val sharedPreferences2 = context?.getSharedPreferences("Main", MODE_PRIVATE)!!
         val gson = Gson()
         val json = sharedPreferences2.getString("activity", null)
@@ -126,15 +131,13 @@ class ForgotPassword2Fragment : Fragment() {
 
             userEmpty_list = gson.fromJson(json, type)
         }
-    }
+    }*/
 
-    fun updateUserList(){
-        val sharedPreferences = context?.getSharedPreferences("Main", MODE_PRIVATE)!!
-        val editor = sharedPreferences.edit()
-        val gson: Gson = Gson()
-        val json: String = gson.toJson(userEmpty_list)
-        editor.putString("activity", json)
-        editor.apply()
-    }
-
-}
+/*fun updateUserList(){
+    val sharedPreferences = context?.getSharedPreferences("Main", MODE_PRIVATE)!!
+    val editor = sharedPreferences.edit()
+    val gson: Gson = Gson()
+    val json: String = gson.toJson(userEmpty_list)
+    editor.putString("activity", json)
+    editor.apply()
+}*/

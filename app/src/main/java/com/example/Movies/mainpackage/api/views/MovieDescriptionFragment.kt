@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentMoviedescriptionBinding
+import com.example.Movies.mainpackage.api.viewModel.MovieDescriptionViewModel
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -25,6 +27,7 @@ import java.lang.reflect.Type
 @Suppress("DEPRECATION")
 class MovieDescriptionFragment : Fragment() {
 
+    lateinit var movieDescriptionViewModel: MovieDescriptionViewModel
     val args: MovieDescriptionFragmentArgs by navArgs()
     lateinit var data1: String //movieName
     lateinit var data2: String //moviePlot
@@ -38,12 +41,8 @@ class MovieDescriptionFragment : Fragment() {
         tickets = 0
     }
 
-
-    private lateinit var sessionId: String //CurrentLoginUser
-
     private var positionOfLoggedInUser = 0 //PositionOfLoggedInUserInList
 
-    private lateinit var user_data: ArrayList<UserDataBase>
     private var fragmentMoviedescriptionBinding: FragmentMoviedescriptionBinding? = null
 
     override fun onCreateView(
@@ -54,6 +53,7 @@ class MovieDescriptionFragment : Fragment() {
         val binding = FragmentMoviedescriptionBinding.inflate(inflater, container, false)
         fragmentMoviedescriptionBinding = binding
         val view = binding.root
+        movieDescriptionViewModel = ViewModelProviders.of(this).get(MovieDescriptionViewModel::class.java)
 
         val randomTicketGenerator = (1..30).random()
 
@@ -121,10 +121,12 @@ class MovieDescriptionFragment : Fragment() {
             binding.btnBookNow.setOnClickListener {
                 if (tickets != 0) {
                     Snackbar.make(btn_bookNow, "Tickets Booked", Snackbar.LENGTH_SHORT).show()
-                    getCurrentUserSessionIdFromIntent()
-                    getUserList()
-                    getPositionOfLoggedInUser()
-                    setBookedTikcetsInfoInLoggedInUser()
+
+                    movieDescriptionViewModel.getUserList()
+                    movieDescriptionViewModel.getCurrentUserSessionIdFromIntent()
+                    positionOfLoggedInUser = movieDescriptionViewModel.getPositionOfLoggedInUser()
+
+                    movieDescriptionViewModel.setBookedTikcetsInfoInLoggedInUser(data1, data4, tickets)
                     val action =
                         MovieDescriptionFragmentDirections.actionMovieDescriptionFragmentToUserBookingsFragment()
                     view.findNavController().navigate(action)
@@ -171,61 +173,62 @@ class MovieDescriptionFragment : Fragment() {
         fragmentMoviedescriptionBinding = null
         super.onDestroyView()
     }
+}
 
-    private fun getCurrentUserSessionIdFromIntent() {
+/*private fun getCurrentUserSessionIdFromIntent() {
         val sharedPreferences = context?.getSharedPreferences("LoginSession", Context.MODE_PRIVATE)
         sessionId = sharedPreferences?.getString("userSessionId", null).toString()
-    }
+    }*/
 
-    private fun setBookedTikcetsInfoInLoggedInUser() {
-        val userBookedMovieInfo = UserDataBase.Movie_booked()
-        userBookedMovieInfo.movie_name = data1
-        userBookedMovieInfo.movie_poster = "https://image.tmdb.org/t/p/w500/" + data4
-        userBookedMovieInfo.movie_tikcets = tickets.toString()
+/*private fun setBookedTikcetsInfoInLoggedInUser() {
+    val userBookedMovieInfo = UserDataBase.Movie_booked()
+    userBookedMovieInfo.movie_name = data1
+    userBookedMovieInfo.movie_poster = "https://image.tmdb.org/t/p/w500/" + data4
+    userBookedMovieInfo.movie_tikcets = tickets.toString()
 
-        user_data.get(positionOfLoggedInUser).movie_booked.add(userBookedMovieInfo)
+    user_data.get(positionOfLoggedInUser).movie_booked.add(userBookedMovieInfo)
 
-        updateUserList()
-    }
+    movieDescriptionViewModel.updateUserList()
+}*/
 
-    private fun updateUserList() {
-        val sharedPreferences: SharedPreferences = context?.getSharedPreferences(
-            "Main",
-            Context.MODE_PRIVATE
-        )!!
-        val editor = sharedPreferences.edit()
-        val gson: Gson = Gson()
-        val json: String = gson.toJson(user_data)
-        editor.putString("activity", json)
-        editor.apply()
-    }
+/*private fun updateUserList() {
+    val sharedPreferences: SharedPreferences = context?.getSharedPreferences(
+        "Main",
+        Context.MODE_PRIVATE
+    )!!
+    val editor = sharedPreferences.edit()
+    val gson: Gson = Gson()
+    val json: String = gson.toJson(user_data)
+    editor.putString("activity", json)
+    editor.apply()
+}*/
 
-    private fun getPositionOfLoggedInUser() {
-        for(i in 0 until user_data.size)
+/*private fun getPositionOfLoggedInUser() {
+    for(i in 0 until user_data.size)
+    {
+        if(sessionId == user_data.get(i).user_email)
         {
-            if(sessionId == user_data.get(i).user_email)
-            {
-                positionOfLoggedInUser = i
-            }
+            positionOfLoggedInUser = i
         }
     }
+}*/
 
-    fun getUserList() {
-        val sharedPreferences2: SharedPreferences = context?.getSharedPreferences(
-            "Main",
-            Context.MODE_PRIVATE
-        )!!
-        val gson = Gson()
-        val json = sharedPreferences2.getString("activity", null)
-        val type: Type = object : TypeToken<ArrayList<UserDataBase>>() {}.type
-        if(json==null){
-            user_data=ArrayList<UserDataBase>()
-        }else{
-            user_data = gson.fromJson(json, type)
-        }
+/*fun getUserList() {
+    val sharedPreferences2: SharedPreferences = context?.getSharedPreferences(
+        "Main",
+        Context.MODE_PRIVATE
+    )!!
+    val gson = Gson()
+    val json = sharedPreferences2.getString("activity", null)
+    val type: Type = object : TypeToken<ArrayList<UserDataBase>>() {}.type
+    if(json==null){
+        user_data=ArrayList<UserDataBase>()
+    }else{
+        user_data = gson.fromJson(json, type)
     }
+}*/
 
-    /*override fun onCreate(savedInstanceState: Bundle?) {
+/*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_moviedescription)
         val imageview: ImageView = findViewById(R.id.imageView3) as ImageView
@@ -315,4 +318,3 @@ class MovieDescriptionFragment : Fragment() {
         data4 = intent.getStringExtra("moviePoster")!!
 
     }*/
-}
