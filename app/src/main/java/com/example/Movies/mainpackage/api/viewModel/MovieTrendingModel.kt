@@ -4,13 +4,14 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
-import com.example.Movies.mainpackage.api.ApiInterface.OMDBapi
-import com.example.Movies.mainpackage.api.ApiInterface.RetrofitInstance
-import com.example.Movies.mainpackage.api.model.MovieTrending
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import com.example.Movies.mainpackage.api.ApiInterface.Api_Url
 import com.example.Movies.mainpackage.api.views.MovieTrendingFragment
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import org.json.JSONObject
 
 class MovieTrendingModel(application: Application) : AndroidViewModel(application) {
 
@@ -23,9 +24,22 @@ class MovieTrendingModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun getTrendingMoviesList(context: MovieTrendingFragment) {
-        val getOMDBapi: OMDBapi = RetrofitInstance.getService()
-        val call: Call<MovieTrending> = getOMDBapi.trendingMovieList
+        val url = Api_Url.TRENDING_URL
 
+        val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
+            com.android.volley.Response.Listener { response: JSONObject ->
+                if (response != null) {
+                    context.setListFromApiToRecyclerAdapter(response)
+                }
+            }, Response.ErrorListener {
+                context.onFailureApiCall()
+            })
+
+        val queue: RequestQueue? = Volley.newRequestQueue(getApplication())
+        queue!!.add(jsonObjectRequest)
+
+        /*val getOMDBapi: OMDBapi = RetrofitInstance.getService()
+        val call: Call<MovieTrending> = getOMDBapi.trendingMovieList
 
         call.enqueue(object : Callback<MovieTrending> {
 
@@ -34,7 +48,7 @@ class MovieTrendingModel(application: Application) : AndroidViewModel(applicatio
                 response: Response<MovieTrending>?,
             ) {
                 if (response != null) {
-                    context.setListFromApiToRecyclerAdapter(response.body())
+                    context.setListFromApiToRecyclerAdapter(response.)
                 }
             }
 
@@ -42,6 +56,7 @@ class MovieTrendingModel(application: Application) : AndroidViewModel(applicatio
                 context.onFailureApiCall()
             }
         })
+    }*/
     }
 
 

@@ -24,6 +24,8 @@ import com.example.Movies.mainpackage.api.adapter.MyAdapter
 import com.example.Movies.mainpackage.api.model.MovieTrending
 import com.example.Movies.mainpackage.api.viewModel.MovieTrendingModel
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
+import org.json.JSONObject
 
 @Suppress("DEPRECATION")
 open class MovieTrendingFragment : Fragment() {
@@ -102,11 +104,12 @@ open class MovieTrendingFragment : Fragment() {
 
 
 
-    fun setListFromApiToRecyclerAdapter(body: MovieTrending) {
+    fun setListFromApiToRecyclerAdapter(body: JSONObject) {
         val linearLayoutManager = LinearLayoutManager(context)
+        val gson = Gson()
+        val movieTrending: MovieTrending = gson.fromJson(body.toString(), MovieTrending::class.java)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-
-        myAdapter = MyAdapter(context, body.results)
+        myAdapter = MyAdapter(context, movieTrending.results)
         //myAdapter.notifyDataSetChanged()
 
         fragmentMovietrendingBinding?.RecyclerView?.adapter = myAdapter
@@ -143,6 +146,7 @@ open class MovieTrendingFragment : Fragment() {
         fragmentMovietrendingBinding = null
         super.onDestroyView()
     }
+
 
 }
 

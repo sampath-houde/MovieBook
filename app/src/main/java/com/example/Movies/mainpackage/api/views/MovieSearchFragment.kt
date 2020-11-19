@@ -19,7 +19,10 @@ import com.example.Movies.R
 import com.example.Movies.databinding.FragmentMoviesearchBinding
 import com.example.Movies.mainpackage.api.adapter.MyAdapter2
 import com.example.Movies.mainpackage.api.model.MovieSearchList
+import com.example.Movies.mainpackage.api.model.MovieTrending
 import com.example.Movies.mainpackage.api.viewModel.MovieSearchViewModel
+import com.google.gson.Gson
+import org.json.JSONObject
 
 @Suppress("DEPRECATION")
 class MovieSearchFragment : Fragment() {
@@ -81,10 +84,11 @@ class MovieSearchFragment : Fragment() {
         progrressCardView.visibility = View.INVISIBLE
     }
 
-    fun setDataToRecycler2(body: MovieSearchList) {
+    fun setDataToRecycler2(body: JSONObject) {
         progrressCardView.visibility = View.INVISIBLE
-
-        myAdapter = MyAdapter2(context, body.results2)
+        val gson = Gson()
+        val movieSearchList: MovieSearchList = gson.fromJson(body.toString(), MovieSearchList::class.java)
+        myAdapter = MyAdapter2(context, movieSearchList.results2)
         recyclerView.adapter = myAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
     }

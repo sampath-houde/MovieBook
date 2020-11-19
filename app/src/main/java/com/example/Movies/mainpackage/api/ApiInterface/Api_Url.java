@@ -1,13 +1,15 @@
 package com.example.Movies.mainpackage.api.ApiInterface;
 
-import com.example.Movies.mainpackage.api.ApiInterface.OMDBapi;
-
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitInstance {
+public class Api_Url {
 
-    private static Retrofit retrofit = null;
+    public static final String TRENDING_URL = "https://api.themoviedb.org/3/trending/all/day?api_key=b7cd3340a794e5a2f35e3abb820b497f";
+    public static final String SEARCH_URL = "https://api.themoviedb.org/3/search/movie?api_key=b7cd3340a794e5a2f35e3abb820b497f&query=";
+
+}
+/*private static Retrofit retrofit = null;
     public static final String BASE_URL = "https://api.themoviedb.org/3/";
 
     public static OMDBapi getService() {
@@ -21,5 +23,4 @@ public class RetrofitInstance {
         }
 
         return retrofit.create(OMDBapi.class);
-    }
-}
+    }*/
