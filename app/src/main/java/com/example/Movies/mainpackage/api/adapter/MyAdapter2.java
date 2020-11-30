@@ -1,8 +1,11 @@
 package com.example.Movies.mainpackage.api.adapter;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,13 +28,16 @@ import com.example.Movies.mainpackage.api.views.MovieDescriptionFragment;
 
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
 
 
     Context context;
     List<MovieSearchList.Result> movieList;
     MyViewBinding binding;
-    int rating;
+    long DURATION = 250;
+    private boolean on_attach = true;
 
     public MyAdapter2(Context c, List<MovieSearchList.Result> movieList)
     {
@@ -49,6 +56,8 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+
+        FromLeftToRight(holder.cardView, 2);
 
         if(movieList.get(position).getOriginalTitle() == null)
         {
@@ -126,6 +135,56 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
     }
 
     @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                Log.d(TAG, "onScrollStateChanged: Called " + newState);
+                on_attach = false;
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    private void setAnimation(View itemView, int i) {
+        if(!on_attach){
+            i = -1;
+        }
+        boolean isNotFirstItem = i == -1;
+        i++;
+        itemView.setAlpha(0.f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        ObjectAnimator animator = ObjectAnimator.ofFloat(itemView, "alpha", 0.f, 0.5f, 1.0f);
+        ObjectAnimator.ofFloat(itemView, "alpha", 0.f).start();
+        animator.setStartDelay(isNotFirstItem ? DURATION / 2 : (i * DURATION / 3));
+        animator.setDuration(500);
+        animatorSet.play(animator);
+        animator.start();
+    }
+
+
+    private void FromLeftToRight(View itemView, int i) {
+        if(!on_attach){
+            i = -1;
+        }
+        boolean not_first_item = i == -1;
+        i = i + 1;
+        itemView.setTranslationX(-400f);
+        itemView.setAlpha(0.f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        ObjectAnimator animatorTranslateY = ObjectAnimator.ofFloat(itemView, "translationX", -400f, 0);
+        ObjectAnimator animatorAlpha = ObjectAnimator.ofFloat(itemView, "alpha", 1.f);
+        ObjectAnimator.ofFloat(itemView, "alpha", 0.f).start();
+        animatorTranslateY.setStartDelay(not_first_item ? DURATION : (i * DURATION));
+        animatorTranslateY.setDuration((not_first_item ? 2 : 1) * DURATION);
+        animatorSet.playTogether(animatorTranslateY, animatorAlpha);
+        animatorSet.start();
+    }
+
+    @Override
     public int getItemCount() {
         return movieList.size();
     }
@@ -137,6 +196,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
         ImageView img;
         ConstraintLayout mainLayout;
         ImageButton btn_fav;
+        CardView cardView;
 
         public ViewHolder(MyViewBinding binding) {
             super(binding.getRoot());
@@ -145,6 +205,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.ViewHolder> {
             img = binding.imageView1;
             mainLayout = binding.mainLayout;
             btn_fav = binding.btnFavicon;
+            cardView = binding.view;
         }
     }
 }

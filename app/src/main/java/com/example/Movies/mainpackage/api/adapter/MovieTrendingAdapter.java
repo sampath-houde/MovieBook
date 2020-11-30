@@ -1,31 +1,29 @@
 package com.example.Movies.mainpackage.api.adapter;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.SharedPreferencesKt;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.Movies.databinding.MyViewBinding;
-import com.example.Movies.mainpackage.api.model.MovieSearchList;
-import com.example.Movies.mainpackage.api.model.MovieTrending;
 import com.example.Movies.R;
 import com.example.Movies.userDataBase.UserDataBase;
 import com.google.android.material.snackbar.Snackbar;
@@ -36,16 +34,25 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+import static android.content.ContentValues.TAG;
+import static com.daimajia.androidanimations.library.BaseViewAnimator.DURATION;
+
+public class MovieTrendingAdapter extends RecyclerView.Adapter<MovieTrendingAdapter.ViewHolder> {
 
     Context context;
-    List<MovieTrending.Result> movieList;
+    List<com.example.Movies.mainpackage.api.model.MovieTrending.Result> movieList;
     private String sessionId;
+    SweetAlertDialog addFavDialog;
+    long DURATION = 150;
+    private boolean on_attach = true;
+
     private ArrayList<UserDataBase> user_data;
     UserDataBase.Movie_Favourites user_favourites = new UserDataBase.Movie_Favourites();
     MyViewBinding binding;
 
-    public MyAdapter(Context c, List<MovieTrending.Result> movieList) {
+    public MovieTrendingAdapter(Context c, List<com.example.Movies.mainpackage.api.model.MovieTrending.Result> movieList) {
         this.context = c;
         this.movieList = movieList;
     }
@@ -62,6 +69,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
         holder.setIsRecyclable(false);
+
+        FromLeftToRight(holder.cardView, 2);
+
+        //YoYo.with(Techniques.FadeInLeft).duration(200).playOn(holder.cardView);
 
         if (movieList.get(position).getOriginalTitle() == null) {
             holder.moviename.setText(movieList.get(position).getOriginalName());
@@ -103,7 +114,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 load("https://image.tmdb.org/t/p/w500/" + s1)
                 .into(holder.img);
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -141,13 +153,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 }
         }
 
+        addFavDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+        addFavDialog.setTitle("Added To Favorites");
         holder.btn_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (user_data.get(getPositionOfLoggedInUser()).getMovie_favourites().size() == 0) {
-                    Snackbar.make(holder.btn_fav, "Added to Wishlist", Snackbar.LENGTH_SHORT).show();
                     //holder.btn_fav.setImageResource(R.drawable.ic_baseline_favorite_24);
+                    addFavDialog.show();
                     addItemToFavouriteList(position);
                 } else {
                     if (checkIfMovieIsPresentInFavourites(position)) {
@@ -155,8 +169,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                         //holder.btn_fav.setImageResource(R.drawable.ic_baseline_favorite_border_24);
                         removeitemFromFavouriteList(position);
                     } else {
-                        Snackbar.make(v, "Added to Wishlist", Snackbar.LENGTH_SHORT).show();
+                        //Snackbar.make(v, "Added to Wishlist", Snackbar.LENGTH_SHORT).show();
                         //holder.btn_fav.setImageResource(R.drawable.ic_baseline_favorite_24);
+                        addFavDialog.show();
                         addItemToFavouriteList(position);
                     }
                 }
@@ -166,6 +181,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
 
     }
+
 
     private Boolean checkIfMovieIsPresentInFavourites(int position) {
         int z=0;
@@ -261,6 +277,56 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                Log.d(TAG, "onScrollStateChanged: Called " + newState);
+                on_attach = false;
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    private void setAnimation(View itemView, int i) {
+        if(!on_attach){
+            i = -1;
+        }
+        boolean isNotFirstItem = i == -1;
+        i++;
+        itemView.setAlpha(0.f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        ObjectAnimator animator = ObjectAnimator.ofFloat(itemView, "alpha", 0.f, 0.5f, 1.0f);
+        ObjectAnimator.ofFloat(itemView, "alpha", 0.f).start();
+        animator.setStartDelay(isNotFirstItem ? DURATION / 2 : (i * DURATION / 3));
+        animator.setDuration(500);
+        animatorSet.play(animator);
+        animator.start();
+    }
+
+
+    private void FromLeftToRight(View itemView, int i) {
+        if(!on_attach){
+            i = -1;
+        }
+        boolean not_first_item = i == -1;
+        i = i + 1;
+        itemView.setTranslationX(-400f);
+        itemView.setAlpha(0.f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        ObjectAnimator animatorTranslateY = ObjectAnimator.ofFloat(itemView, "translationX", -400f, 0);
+        ObjectAnimator animatorAlpha = ObjectAnimator.ofFloat(itemView, "alpha", 1.f);
+        ObjectAnimator.ofFloat(itemView, "alpha", 0.f).start();
+        animatorTranslateY.setStartDelay(not_first_item ? DURATION : (i * DURATION));
+        animatorTranslateY.setDuration((not_first_item ? 2 : 1) * DURATION);
+        animatorSet.playTogether(animatorTranslateY, animatorAlpha);
+        animatorSet.start();
+    }
+
+    @Override
     public int getItemCount() {
         return movieList.size();
     }
@@ -270,18 +336,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         ImageView img;
         RatingBar movierating;
         ImageButton btn_fav;
+        CardView cardView;
         ConstraintLayout mainLayout;
-        CardView view;
 
         public ViewHolder(MyViewBinding binding) {
             super(binding.getRoot());
             moviename = binding.movieName;
             movierating = binding.movieRating;
             img = binding.imageView1;
+            cardView = binding.view;
             movieAdult = binding.adult;
             btn_fav = binding.btnFavicon;
             mainLayout = binding.mainLayout;
-            view = binding.view;
 
         }
     }

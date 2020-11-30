@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentForgotpassword2Binding
 import com.example.Movies.login_register.views.loginRegisterViewModels.ForgotPassword2ViewModel
@@ -44,7 +46,7 @@ class ForgotPassword2Fragment : Fragment() {
         password1 = binding.passwordEditText
         password2 = binding.passwordEditText2
 
-        binding.btnCreate.setOnClickListener {
+        binding.btnNext.setOnClickListener {
             val boolean = checkConditions()
             if(boolean) {
                 val boolean = forgotpassword2ViewModel.updatePassword(args.key, password2.text.toString())
@@ -55,7 +57,7 @@ class ForgotPassword2Fragment : Fragment() {
             }
         }
 
-        binding.btnBack.setOnClickListener {
+        binding.btnback.setOnClickListener {
             Navigation.findNavController(view).navigateUp()
         }
 
@@ -66,11 +68,13 @@ class ForgotPassword2Fragment : Fragment() {
         var o =0
         if(password1.text.toString().isEmpty())
         {
-            passwordInputLayout.error = "Enter Password"
+            YoYo.with(Techniques.Shake).playOn(password1)
+            password1.error = "Enter password"
         } else {o++}
 
         if(password2.text.toString().isEmpty()){
-            passwordInputLayout2.error = "Enter Password"
+            YoYo.with(Techniques.Shake).playOn(password2)
+            password2.error = "Enter password"
         } else {o++}
 
         if(password2.text.toString() != password1.text.toString()){

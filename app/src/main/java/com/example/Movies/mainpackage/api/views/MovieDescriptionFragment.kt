@@ -18,6 +18,7 @@ import com.example.Movies.R
 import com.example.Movies.databinding.FragmentMoviedescriptionBinding
 import com.example.Movies.mainpackage.api.viewModel.MovieDescriptionViewModel
 import com.example.Movies.userDataBase.UserDataBase
+import com.gauravk.bubblenavigation.BubbleToggleView
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -57,11 +58,14 @@ class MovieDescriptionFragment : Fragment() {
 
         val randomTicketGenerator = (1..30).random()
 
+        binding.btnBack.setOnClickListener {
+            Navigation.findNavController(view).navigateUp()
+        }
+
         Handler().postDelayed({
             binding.imageCardView.visibility = View.VISIBLE
             binding.movieNameCardView.visibility = View.VISIBLE
             binding.plotCardView.visibility = View.VISIBLE
-            binding.progressCardView.visibility = View.INVISIBLE
             binding.bookingCard.visibility = View.VISIBLE
             binding.materialRatingBar.visibility = View.VISIBLE
             // Set Data
@@ -125,7 +129,9 @@ class MovieDescriptionFragment : Fragment() {
                     movieDescriptionViewModel.getUserList()
                     movieDescriptionViewModel.getCurrentUserSessionIdFromIntent()
                     positionOfLoggedInUser = movieDescriptionViewModel.getPositionOfLoggedInUser()
-
+                    /*val bubbleNavigationBooking  = requireActivity().findViewById<BubbleToggleView>(R.id.bubbleToggleView4)
+                    val bubbleNavigationHome = requireActivity().findViewById<BubbleToggleView>(R.id.bubbleToggleView1)
+*/
                     movieDescriptionViewModel.setBookedTikcetsInfoInLoggedInUser(data1, data4, tickets)
                     val action =
                         MovieDescriptionFragmentDirections.actionMovieDescriptionFragmentToUserBookingsFragment()
@@ -137,11 +143,6 @@ class MovieDescriptionFragment : Fragment() {
                 }
             }
 
-            binding.myToolbar.setTitle("Movie Description")
-            binding.myToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-            binding.myToolbar.setNavigationOnClickListener {
-                Navigation.findNavController(view).navigateUp()
-            }
 
 
         }, 500)
@@ -151,7 +152,6 @@ class MovieDescriptionFragment : Fragment() {
         binding.movieNameCardView.visibility = View.INVISIBLE
         binding.imageCardView.visibility = View.INVISIBLE
         binding.materialRatingBar.visibility = View.INVISIBLE
-        binding.progressCardView.visibility = View.VISIBLE
 
         // Get Data
         data5 = args.movieDate!!

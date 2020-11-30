@@ -7,5 +7,6 @@
         <item>@font/muli_extrabold</item>
         <item>@font/muli_extralight</item>
         <item>@font/roboto_bold</item>
+        <item>@font/source_sans_pro_semibold</item>
     </array>
 </resources>

@@ -13,14 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import com.example.Movies.R
-import com.example.Movies.databinding.UserProfileBinding
+import com.example.Movies.databinding.FragmentUserprofileBinding
 import com.example.Movies.login_register.views.LoginRegisterActivity
 import com.example.Movies.mainpackage.api.viewModel.UserProfileViewModel
 import com.example.Movies.userDataBase.UserDataBase
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
 
 @Suppress("DEPRECATION")
 class UserProfileFragment : Fragment() {
@@ -33,7 +30,7 @@ class UserProfileFragment : Fragment() {
     private lateinit var emailLayout: TextInputLayout
     private lateinit var phoneLayout: TextInputLayout
     private var currentLoggedUser: Int = 0
-    private var userprofileBinding: UserProfileBinding? = null
+    private var userprofileBinding: FragmentUserprofileBinding? = null
     private lateinit var userProfileViewModel: UserProfileViewModel
 
     override fun onCreateView(
@@ -41,7 +38,7 @@ class UserProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = UserProfileBinding.inflate(inflater, container, false)
+        val binding = FragmentUserprofileBinding.inflate(inflater, container, false)
         userprofileBinding = binding
         val view = binding.root
 
@@ -59,13 +56,13 @@ class UserProfileFragment : Fragment() {
 
         fetchDetailsOfCurrentUser()
 
-        binding.btnBookings.setOnClickListener {
+        /*binding.btnBookings.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.userBookingsFragment)
         }
 
         binding.btnWishlist.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.favouritesFragment)
-        }
+        }*/
 
         binding.btnLogout.setOnClickListener {
             Toast.makeText(context, "Logout Successful", Toast.LENGTH_SHORT).show()
@@ -75,9 +72,6 @@ class UserProfileFragment : Fragment() {
             activity?.finish()
         }
 
-        binding.btnBack.setOnClickListener {
-            Navigation.findNavController(view).navigateUp()
-        }
 
         binding.btnUpdate.setOnClickListener {
             updateDataOfTheUser()

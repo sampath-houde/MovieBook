@@ -26,6 +26,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
 
     private ArrayList<UserDataBase> user_data;
@@ -58,7 +60,29 @@ public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
         holder.wishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MaterialAlertDialogBuilder(context)
+                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Are you sure?")
+                        .setCancelText("No")
+                        .setConfirmText("Yes")
+                        .showCancelButton(true)
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.setTitleText("Removed!")
+                                        .setContentText("Movie has been removed from favourites!")
+                                        .setConfirmText("OK")
+                                        .showCancelButton(false)
+                                        .setCancelClickListener(null)
+                                        .setConfirmClickListener(null)
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                movieFavourites.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, movieFavourites.size());
+                                removeMovieObject(movieFavourites);
+                            }
+                        })
+                        .show();
+                /*new MaterialAlertDialogBuilder(context)
                         .setMessage("Are you sure you want to remove this from your wishlist")
                         .setPositiveButton("NO", new DialogInterface.OnClickListener() {
                             @Override
@@ -74,7 +98,7 @@ public class Adapter4 extends RecyclerView.Adapter<Adapter4.ViewHolder> {
                                 notifyItemRangeChanged(position, movieFavourites.size());
                                 removeMovieObject(movieFavourites);
                             }
-                        }).show();
+                        }).show();*/
             }
         });
 

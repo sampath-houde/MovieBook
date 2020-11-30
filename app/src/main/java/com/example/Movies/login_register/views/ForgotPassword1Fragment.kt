@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentForgotpassword1Binding
 import com.example.Movies.login_register.views.loginRegisterViewModels.ForgotPassword1ViewModel
@@ -51,16 +53,22 @@ class ForgotPassword1Fragment : Fragment() {
             }
         }
 
-        binding.btnBack.setOnClickListener {
+        binding.btnback.setOnClickListener {
             Navigation.findNavController(view).navigateUp()
         }
 
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        emailText.setText("")
+        phoneText.setText("")
+    }
+
     private fun actionOnCheckUserValidStatus(status: Int) {
         if (status == 0) {
-            Snackbar.make(btn_next, "User doesn't exist", Snackbar.LENGTH_LONG)
+            Snackbar.make(fragmentForgotpassword1Binding!!.btnback, "User doesn't exist", Snackbar.LENGTH_LONG)
                 .setAction("Register")
                 {
                     view?.findNavController()!!
@@ -73,31 +81,38 @@ class ForgotPassword1Fragment : Fragment() {
                 ForgotPassword1FragmentDirections.actionForgotPassword1FragmentToForgotPassword2Fragment(0)
             view?.findNavController()!!.navigate(action)
         } else {
-            Snackbar.make(btn_next, "Invalid Combination", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(fragmentForgotpassword1Binding!!.btnNext, "Invalid Combination", Snackbar.LENGTH_SHORT).show()
         }
     }
 
     private fun checkFields(): Int {
         var i = 0
-        if (phoneText.text.toString().isEmpty()) {
-            phoneEditTextLayout.error = "*Enter Contact Number"
-        } else if (phoneText.text.toString().length != 10) {
-            phoneEditTextLayout.error = "Invalid Contact Number"
-            phoneText.text = ""
+
+        if (emailText.text.toString().isEmpty()) {
+            YoYo.with(Techniques.Shake).playOn(emailText)
+            emailText.error = "Enter email"
+        } else if (!(emailText.text.toString().contains("@") && emailText.text.toString()
+                .contains(".com"))
+        ) {
+            YoYo.with(Techniques.Shake).playOn(emailText)
+            emailText.text = ""
+            emailText.error = "Enter valid email"
         } else {
             i++
         }
 
-        if (emailText.text.toString().isEmpty()) {
-            emailInputLayout.error = "*Enter Email Id"
-        } else if (!(emailText.text.toString().contains("@") && emailText.text.toString()
-                .contains(".com"))
-        ) {
-            emailInputLayout.error = "Enter valid email id"
-            emailText.text = ""
+        if (phoneText.text.toString().isEmpty()) {
+            YoYo.with(Techniques.Shake).delay(1).playOn(phoneText)
+            phoneText.error = "Enter phone"
+        } else if (phoneText.text.toString().length != 10) {
+            YoYo.with(Techniques.Shake).playOn(phoneText)
+            phoneText.text = ""
+            phoneText.error = "Enter valid phone number"
         } else {
             i++
         }
+
+
         return i
     }
 

@@ -1,6 +1,7 @@
 package com.example.Movies.mainpackage.api.views
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentFavouritesBinding
 import com.example.Movies.mainpackage.api.adapter.Adapter4
@@ -23,6 +25,8 @@ class FavouritesFragment : Fragment(){
     private lateinit var myAdapter: Adapter4
 
     private lateinit var sessionId: String
+
+    private lateinit var progressBar: SweetAlertDialog
 
     private var positionOfCurrentLoggedIn: Int = 0
 
@@ -47,12 +51,6 @@ class FavouritesFragment : Fragment(){
         recyclerView = binding.RecyclerView4
 
 
-        binding.myToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-        binding.myToolbar.setNavigationOnClickListener {
-            Navigation.findNavController(view).navigateUp()
-        }
-        binding.myToolbar.setTitle("Favourites")
-
         userFavouritesViewModel.getPositionOfCurrentLoggedInUser()
         userFavouritesViewModel.setDataToRecycler3Adapter(this)
 
@@ -60,11 +58,17 @@ class FavouritesFragment : Fragment(){
     }
 
     fun setDataToRecycler(newUserFavourites: ArrayList<UserDataBase.Movie_Favourites>) {
-        myAdapter = Adapter4(context, newUserFavourites)
-        myAdapter.notifyDataSetChanged()
+        progressBar = SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE)
+        progressBar.hideConfirmButton().setTitleText("Loading...").show()
+        Handler().postDelayed({
+            myAdapter = Adapter4(context, newUserFavourites)
+            myAdapter.notifyDataSetChanged()
 
-        recyclerView.adapter = myAdapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.adapter = myAdapter
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            progressBar.hide()
+        }, 400)
+
     }
 
     override fun onDestroyView() {

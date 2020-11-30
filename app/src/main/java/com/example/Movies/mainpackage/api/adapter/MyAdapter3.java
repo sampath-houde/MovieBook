@@ -28,6 +28,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
 
     private ArrayList<UserDataBase> user_data;
@@ -66,7 +68,30 @@ public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
             @Override
             public void onClick(View v) {
                 holder.layout.setBackgroundColor(Color.parseColor("#FFFF4444"));
-                new MaterialAlertDialogBuilder(context)
+                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Are you sure?")
+                        .setCancelText("No")
+                        .setConfirmText("Yes")
+                        .showCancelButton(true)
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.setTitleText("Cancelled!")
+                                        .setContentText("Your booking has been cancelled!")
+                                        .setConfirmText("OK")
+                                        .showCancelButton(false)
+                                        .setCancelClickListener(null)
+                                        .setConfirmClickListener(null)
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                movieBookedList.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, movieBookedList.size());
+                                removeMovieObject(movieBookedList);
+                            }
+                        })
+                        .show();
+                holder.layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                /*new MaterialAlertDialogBuilder(context)
                         .setTitle("Cancel Ticket")
                         .setMessage("Do you want to cancel the ticket")
                         .setPositiveButton("No", new DialogInterface.OnClickListener() {
@@ -83,7 +108,7 @@ public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.ViewHolder> {
                                 notifyItemRangeChanged(position, movieBookedList.size());
                                 removeMovieObject(movieBookedList);
                             }
-                        }).show();
+                        }).show();*/
             }
         });
 

@@ -13,6 +13,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentRegisterBinding
 import com.example.Movies.login_register.views.loginRegisterViewModels.RegisterViewModel
@@ -41,7 +43,7 @@ class RegisterFragment : Fragment() {
     ): View? {
         val binding = FragmentRegisterBinding.inflate(inflater, container, false)
         fragmentRegisterBinding = binding
-        user_name= binding.nameEditText
+        user_name = binding.nameEditText
         user_email = binding.emailEditText
         user_phone = binding.phoneEditText
         user_password = binding.passwordEditText
@@ -49,10 +51,12 @@ class RegisterFragment : Fragment() {
         registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
 
         binding.btnRegister.setOnClickListener {
-            if(checkErrors() == 4) {
-                val boolean = registerViewModel.setAndAddAllData(user_name.text.toString(), user_email.text.toString(),
-                                 user_phone.text.toString(), user_password.text.toString())
-                if(boolean) {
+            if (checkErrors() == 4) {
+                val boolean = registerViewModel.setAndAddAllData(
+                    user_name.text.toString(), user_email.text.toString(),
+                    user_phone.text.toString(), user_password.text.toString()
+                )
+                if (boolean) {
                     view.findNavController().navigate(R.id.loginFragment)
                     Toast.makeText(context, "Registered Successfully", Toast.LENGTH_SHORT).show()
                 }
@@ -60,10 +64,10 @@ class RegisterFragment : Fragment() {
         }
 
         binding.btnLogin.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_loginFragment)
+            Navigation.findNavController(view).navigateUp()
         }
 
-        binding.btnBack.setOnClickListener {
+        binding.btnback.setOnClickListener {
             Navigation.findNavController(view).navigateUp()
         }
 
@@ -75,42 +79,45 @@ class RegisterFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private fun checkErrors() : Int {
+    private fun checkErrors(): Int {
 
         var i = 0
 
         if (user_name.text.toString().isEmpty()) {
-            nameEditTextLayout.error = "*Enter Name"
-        } else {i++}
+            user_name.error = "Enter name"
+        } else {
+            i++
+        }
 
         if (user_email.text.toString().isEmpty()) {
-            emailEditTextLayout.error = "*Enter email id"
-        } else if ((user_email.text.toString().contains("@") && user_email.text.toString().contains(".com")) == false) {
-            emailEditTextLayout.error = "Invalid email id"
+            user_email.error = "Enter Email"
+        } else if ((user_email.text.toString().contains("@") && user_email.text.toString()
+                .contains(".com")) == false
+        ) {
             user_email.setText("")
-        } else{i++}
+            user_email.error = "Enter valid email"
+        } else {
+            i++
+        }
 
-        if(user_phone.text.toString().isEmpty())
-        {
-            phoneEditTextLayout.error = "*Enter Phone Number"
-        } else if(user_phone.text.toString().length != 10)
-        {
-            phoneEditTextLayout.error = "Enter valid phone number"
+        if (user_phone.text.toString().isEmpty()) {
+            user_phone.error = "Enter phone number"
+        } else if (user_phone.text.toString().length != 10) {
+            user_phone.error = "Enter valid phone number"
             user_phone.setText("")
         } else {i++}
 
-        if(user_password.text.toString().isEmpty())
-        {
-            passwordEditTextLayout.error = "*Enter Password"
-        } else if(user_password.text.contains(" ")){
-            passwordEditTextLayout.error = "No spaces allowed"
+            if (user_password.text.toString().isEmpty()) {
+                user_password.error = "Enter password"
+        } else if (user_password.text.contains(" ")) {
+                user_password.error = "No spaces allowed"
+                user_password.setText("")
         } else {i++}
 
         return i;
     }
-
-
 }
+
 
 /*//Function to add all data
     fun setAndAddAllData() {

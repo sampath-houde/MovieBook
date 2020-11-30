@@ -3,6 +3,7 @@ package com.example.Movies.mainpackage.api.views
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentUserbookingsBinding
 import com.example.Movies.mainpackage.api.adapter.MyAdapter3
@@ -28,6 +30,8 @@ class UserBookingsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var sessionId: String
+
+    private lateinit var progressBar: SweetAlertDialog
 
     private var fragmentUserbookingsBinding: FragmentUserbookingsBinding? = null
 
@@ -51,12 +55,6 @@ class UserBookingsFragment : Fragment() {
 
         recyclerView = binding.recyclerView3
 
-        binding.myToolbar.setTitle("Bookings")
-        binding.myToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-        binding.myToolbar.setNavigationOnClickListener {
-            Navigation.findNavController(view).navigateUp()
-        }
-
         userBookingsViewModel.getPositionOfCurrentLoggedInUser()
         userBookingsViewModel.setDataToRecycler3Adapter(this)
 
@@ -64,9 +62,15 @@ class UserBookingsFragment : Fragment() {
     }
 
      fun setDataToRecycle3(userMovieBookedList: ArrayList<UserDataBase.Movie_booked>) {
-        myAdapter3 = MyAdapter3(context, userMovieBookedList)
-        recyclerView.adapter = myAdapter3
-        recyclerView.layoutManager = LinearLayoutManager(context)
+         progressBar = SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE)
+         progressBar.hideConfirmButton().setTitleText("Loading...").show()
+         Handler().postDelayed({
+             myAdapter3 = MyAdapter3(context, userMovieBookedList)
+             recyclerView.adapter = myAdapter3
+             recyclerView.layoutManager = LinearLayoutManager(context)
+             progressBar.hide()
+         }, 400)
+
     }
 
 }

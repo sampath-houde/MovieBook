@@ -6,9 +6,8 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -16,11 +15,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentMovietrendingBinding
 import com.example.Movies.login_register.views.LoginRegisterActivity
-import com.example.Movies.mainpackage.api.MainActivity
-import com.example.Movies.mainpackage.api.adapter.MyAdapter
+import com.example.Movies.mainpackage.api.adapter.MovieTrendingAdapter
 import com.example.Movies.mainpackage.api.model.MovieTrending
 import com.example.Movies.mainpackage.api.viewModel.MovieTrendingModel
 import com.google.android.material.navigation.NavigationView
@@ -33,8 +32,10 @@ open class MovieTrendingFragment : Fragment() {
     private lateinit var drawerLayoutManager: DrawerLayout
     private lateinit var navigationView: NavigationView
     private lateinit var recyclerView: RecyclerView
-    private lateinit var myAdapter: MyAdapter
-    private lateinit var toolbar: Toolbar
+    private lateinit var movieTrendingAdapter: MovieTrendingAdapter
+    private lateinit var navigationToggle: ImageView
+    private lateinit var errorDialog: SweetAlertDialog
+    private lateinit var progressDialog: SweetAlertDialog
     private var fragmentMovietrendingBinding: FragmentMovietrendingBinding? = null
     lateinit var movietrendingViewModel: MovieTrendingModel
 
@@ -47,25 +48,28 @@ open class MovieTrendingFragment : Fragment() {
         val binding = FragmentMovietrendingBinding.inflate(inflater, container, false)
         fragmentMovietrendingBinding = binding
         val view = binding.root
+        //navigationToggle = binding.navigationIcon
         movietrendingViewModel = ViewModelProviders.of(this).get(MovieTrendingModel::class.java)
-        toolbar = binding.myToolbar
-        drawerLayoutManager = binding.drawerlayout
+        //drawerLayoutManager = binding.drawerlayout
         recyclerView = binding.RecyclerView
 
 
-        callNaviagtionDrawer(view)
-
-        binding.progressCardView.visibility = View.VISIBLE
+        progressDialog = SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE)
+        progressDialog.setTitleText("Loading...").hideConfirmButton().setCanceledOnTouchOutside(false)
+        progressDialog.show()
+        movietrendingViewModel.getTrendingMoviesList(this)
+        //callNaviagtionDrawer(view)
 
         return view
     }
 
-    fun callNaviagtionDrawer(view: DrawerLayout) {
+    /*fun callNaviagtionDrawer(view: DrawerLayout) {
         Handler().postDelayed({
-            movietrendingViewModel.getTrendingMoviesList(this)
-            toolBarMenu()
-            setupNavigationDrawer()
-            navigationView = fragmentMovietrendingBinding?.navigationView!!
+
+            navigationToggle.setOnClickListener{
+                drawerLayoutManager.openDrawer(GravityCompat.START)
+            }
+            //navigationView = fragmentMovietrendingBinding?.navigationView!!
 
             navigationView.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener {
 
@@ -98,48 +102,39 @@ open class MovieTrendingFragment : Fragment() {
                 }
                 drawerLayoutManager.closeDrawer(GravityCompat.START)
                 return@OnNavigationItemSelectedListener true;
+
             })
         }, 1500)
-    }
-
+    }*/
 
 
     fun setListFromApiToRecyclerAdapter(body: JSONObject) {
-        val linearLayoutManager = LinearLayoutManager(context)
-        val gson = Gson()
-        val movieTrending: MovieTrending = gson.fromJson(body.toString(), MovieTrending::class.java)
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        myAdapter = MyAdapter(context, movieTrending.results)
-        //myAdapter.notifyDataSetChanged()
+        Handler().postDelayed({
+            val linearLayoutManager = LinearLayoutManager(context)
+            val gson = Gson()
+            val movieTrending: MovieTrending = gson.fromJson(body.toString(), MovieTrending::class.java)
+            linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+            this.movieTrendingAdapter =
+                MovieTrendingAdapter(
+                    context,
+                    movieTrending.results
+                )
+            //myAdapter.notifyDataSetChanged()
+            fragmentMovietrendingBinding?.RecyclerView?.adapter = this.movieTrendingAdapter
+            fragmentMovietrendingBinding?.RecyclerView?.layoutManager = linearLayoutManager
+            progressDialog.hide()
+        }, 2500)
 
-        fragmentMovietrendingBinding?.RecyclerView?.adapter = myAdapter
-        fragmentMovietrendingBinding?.RecyclerView?.layoutManager = linearLayoutManager
-
-        fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
     }
 
     fun onFailureApiCall(){
-        fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
+        errorDialog = SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+            errorDialog.setTitleText("Oops...")
+            .setContentText("No Internet Connection").show()
+        progressDialog.hide()
+        /*fragmentMovietrendingBinding?.progressCardView?.visibility = View.INVISIBLE
         fragmentMovietrendingBinding?.connectionNotAvailable?.visibility = View.VISIBLE
-        fragmentMovietrendingBinding?.textConnection?.visibility = View.VISIBLE
-    }
-
-    fun setupNavigationDrawer() {
-        val toggle = ActionBarDrawerToggle(
-            activity,
-            drawerLayoutManager,
-            toolbar,
-            R.string.openDrawer,
-            R.string.drawerClose
-        )
-
-        drawerLayoutManager.addDrawerListener(toggle)
-        toggle.syncState()
-    }
-
-    fun toolBarMenu() {
-        toolbar.setTitle("Movie Trending")
-        (activity as MainActivity?)!!.setSupportActionBar(toolbar)
+        fragmentMovietrendingBinding?.textConnection?.visibility = View.VISIBLE*/
     }
 
     override fun onDestroyView() {

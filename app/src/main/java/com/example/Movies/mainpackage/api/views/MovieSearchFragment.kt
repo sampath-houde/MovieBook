@@ -5,7 +5,9 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -15,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.Movies.R
 import com.example.Movies.databinding.FragmentMoviesearchBinding
 import com.example.Movies.mainpackage.api.adapter.MyAdapter2
@@ -27,14 +30,13 @@ import org.json.JSONObject
 @Suppress("DEPRECATION")
 class MovieSearchFragment : Fragment() {
 
-    private lateinit var progrressCardView: CardView
-    private lateinit var progressBar: ProgressBar
-    private lateinit var progressTextView: TextView
-    private lateinit var proressLayout: ConstraintLayout
     private lateinit var recyclerView: RecyclerView
+    private lateinit var errorDialog: SweetAlertDialog
+    private lateinit var progressDialog: SweetAlertDialog
     private var fragmentMoviesearchBinding: FragmentMoviesearchBinding? = null
     private lateinit var movieSearchViewModel: MovieSearchViewModel
     private lateinit var myAdapter: MyAdapter2
+    private lateinit var searchQuery: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,52 +47,59 @@ class MovieSearchFragment : Fragment() {
         fragmentMoviesearchBinding = binding
         val view = binding.root
         movieSearchViewModel = ViewModelProviders.of(this).get(MovieSearchViewModel::class.java)
-
-        progressTextView = binding.connecting
-        proressLayout = binding.progressConstraint
-        progressBar = binding.progressBar
-        progrressCardView = binding.progressCardView
         recyclerView = binding.recyclerView2
 
-        binding.searchButton.setOnClickListener {
+
+        /*binding.searchButton.setOnClickListener {
 
             if (binding.searchEditText.text.toString().trim().isEmpty()) {
                 Toast.makeText(context, "Enter Movie Name", Toast.LENGTH_SHORT).show()
             } else {
-                progrressCardView.visibility = View.VISIBLE
-                Handler().postDelayed({
-
+                progressDialog = SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE)
+                progressDialog.setTitleText("Loading...").hideConfirmButton().show()
                     val searchQuery = binding.searchEditText.text.toString()
                     movieSearchViewModel.getSearchMoviesList(searchQuery, this)
                     binding.searchEditText.setText("")
-
-                }, 2000)
             }
 
+        }*/
+
+        binding.searchEditText.setOnEditorActionListener { v, actionId, event ->
+            if(actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (binding.searchEditText.text.toString().trim().isEmpty()) {
+                    Toast.makeText(context, "Enter Movie Name", Toast.LENGTH_SHORT).show()
+                } else {
+                    progressDialog = SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE)
+                    progressDialog.setTitleText("Loading...").hideConfirmButton().show()
+                    searchQuery = binding.searchEditText.text.toString()
+                    movieSearchViewModel.getSearchMoviesList(searchQuery, this)
+                    binding.searchEditText.setText("")
+                }
+            }
+            return@setOnEditorActionListener false
         }
 
-        binding.myToolbar.setTitle("Search Movie")
-        binding.myToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-        binding.myToolbar.setNavigationOnClickListener {
-            Navigation.findNavController(view).navigateUp()
-        }
 
         return view
     }
 
+
     fun onFailedApiCall() {
-        Toast.makeText(context, "Connection Error!!", Toast.LENGTH_SHORT)
-            .show()
-        progrressCardView.visibility = View.INVISIBLE
+        errorDialog = SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+        errorDialog.setTitleText("Oops...").setContentText("No Intenet Conncetion").show()
+        progressDialog.hide()
     }
 
     fun setDataToRecycler2(body: JSONObject) {
-        progrressCardView.visibility = View.INVISIBLE
-        val gson = Gson()
-        val movieSearchList: MovieSearchList = gson.fromJson(body.toString(), MovieSearchList::class.java)
-        myAdapter = MyAdapter2(context, movieSearchList.results2)
-        recyclerView.adapter = myAdapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        Handler().postDelayed({
+            val gson = Gson()
+            val movieSearchList: MovieSearchList = gson.fromJson(body.toString(), MovieSearchList::class.java)
+            myAdapter = MyAdapter2(context, movieSearchList.results2)
+            recyclerView.adapter = myAdapter
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            progressDialog.hide()
+        }, 1500)
+
     }
 
     override fun onDestroyView() {
